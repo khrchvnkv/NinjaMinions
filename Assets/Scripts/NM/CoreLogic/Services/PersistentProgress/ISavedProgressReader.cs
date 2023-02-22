@@ -2,7 +2,7 @@
 
 namespace NM.CoreLogic.Services.PersistentProgress
 {
-    public interface ISavedProgressReader
+    public interface ISavedProgressReader : ISavedProgressWriter
     {
         void LoadProgress(ProgressData progress);
     }

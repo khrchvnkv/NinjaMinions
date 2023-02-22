@@ -12,7 +12,8 @@ namespace NM.CoreLogic.States
 
         private void Awake()
         {
-            _game = new Game(this, _curtain, AllServices.Container);
+            var curtain = Instantiate(_curtain);
+            _game = new Game(this, curtain, AllServices.Container);
             _game.StateMachine.Enter<BootstrapState>();  
             DontDestroyOnLoad(this);
         }

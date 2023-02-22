@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using NM.CoreLogic.LoadingView;
 using NM.CoreLogic.Services;
-using NM.CoreLogic.Services.AssetManagement;
 using NM.CoreLogic.Services.Factory;
+using NM.CoreLogic.Services.PersistentProgress;
+using NM.CoreLogic.Services.SaveLoad;
 using NM.CoreLogic.States;
 
 namespace NM.CoreLogic
@@ -21,7 +22,10 @@ namespace NM.CoreLogic
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, loadingCurtain,
-                    services.Single<GameFactory>()),
+                    services.Single<GameFactory>(), services.Single<PersistentProgressService>()),
+                [typeof(LoadProgressState)] = new LoadProgressState(this, 
+                    services.Single<PersistentProgressService>(),
+                    services.Single<SaveLoadService>()),
                 [typeof(GameLoopState)] = new GameLoopState(this),
             };
         }

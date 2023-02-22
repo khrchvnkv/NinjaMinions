@@ -3,6 +3,7 @@ using NM.CoreLogic.Services.AssetManagement;
 using NM.CoreLogic.Services.Factory;
 using NM.CoreLogic.Services.Input;
 using NM.CoreLogic.Services.PersistentProgress;
+using NM.CoreLogic.Services.SaveLoad;
 
 namespace NM.CoreLogic.States
 {
@@ -27,7 +28,7 @@ namespace NM.CoreLogic.States
         {
             _sceneLoader.Load(Initial, onLoaded: EnterLoadLevelState);
         }
-        private void EnterLoadLevelState() => _gameStateMachine.Enter<LoadLevelState>(Main);
+        private void EnterLoadLevelState() => _gameStateMachine.Enter<LoadProgressState>();
         private void RegisterServices()
         {
             _services.RegisterSingle<InputService>(new StandaloneInputService());
@@ -35,6 +36,8 @@ namespace NM.CoreLogic.States
             _services.RegisterSingle<PersistentProgressService>(new PersistentProgressService());
             _services.RegisterSingle<GameFactory>(
                 new GameFactory(AllServices.Container.Single<AssetProvider>()));
+            _services.RegisterSingle<SaveLoadService>(new SaveLoadService(_services.Single<GameFactory>(),
+                _services.Single<PersistentProgressService>()));
         }
         public void Exit()
         {

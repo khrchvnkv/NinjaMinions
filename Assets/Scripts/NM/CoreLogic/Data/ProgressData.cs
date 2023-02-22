@@ -5,6 +5,11 @@ namespace NM.CoreLogic.Data
     [Serializable]
     public class ProgressData
     {
-        public WorldData WorldData;
+        public LevelState LevelState;
+
+        public ProgressData(string initialLevel)
+        {
+            LevelState = new LevelState(initialLevel);
+        }
     }
 }
