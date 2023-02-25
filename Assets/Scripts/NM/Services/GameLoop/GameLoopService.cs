@@ -28,12 +28,16 @@ namespace NM.Services.GameLoop
         public void ReloadProgress(int slotIndex)
         {
             _inputService.Deactivate();
+            var level = _persistentProgressService.Progress.GetSlotAt(slotIndex).Level;
+            _persistentProgressService.Progress = _saveLoadService.LoadProgress();
             _persistentProgressService.Progress.CurrentSlotIndex = slotIndex;
-            var slot = _persistentProgressService.Progress.GetSlotAt(slotIndex);
-            _gameStateMachine.Enter<LoadLevelState>(slot.Level);
+            _gameStateMachine.Enter<LoadLevelState>(level);
         }
         public void RestartLevel()
         {
+            var slot = _persistentProgressService.Progress.CurrentSlot;
+            slot.MinionsData.Clear();
+            slot.EnemiesData.Clear();
             var currentScene = SceneManager.GetActiveScene().name;
             LoadScene(currentScene);
         }
@@ -45,7 +49,6 @@ namespace NM.Services.GameLoop
         }
         private void LoadScene(string sceneKey)
         {
-            var slot = _persistentProgressService.Progress.CurrentSlot;
             _inputService.Deactivate();
             _gameStateMachine.Enter<LoadLevelState>(sceneKey);
         }

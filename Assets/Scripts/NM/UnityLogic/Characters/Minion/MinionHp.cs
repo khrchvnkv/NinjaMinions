@@ -1,5 +1,7 @@
 ﻿using System;
 using NM.Data;
+using NM.Services;
+using NM.Services.GameLoop;
 using NM.Services.PersistentProgress;
 using UnityEngine;
 
@@ -10,14 +12,16 @@ namespace NM.UnityLogic.Characters.Minion
         public int HP { get; private set; }
         public int MaxHp { get; private set; }
 
-        public event Action<int> OnHpChanged;
-
         private string _id;
-
+        private GameLoopService _gameLoopService;
+        
+        public event Action<int> OnHpChanged;
+        
         public void Construct(string id, int maxHp)
         {
             _id = id;
             MaxHp = maxHp;
+            _gameLoopService = AllServices.Container.Single<GameLoopService>();
         }
         public void TakeDamage(int damage = 1)
         {
@@ -25,6 +29,10 @@ namespace NM.UnityLogic.Characters.Minion
             
             HP -= damage;
             OnHpChanged?.Invoke(HP);
+            if (HP <= 0)
+            {
+                _gameLoopService.RestartLevel();
+            }
         }
         public void SaveProgress(SaveSlotData slot)
         {
