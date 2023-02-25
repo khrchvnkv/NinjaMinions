@@ -42,7 +42,8 @@ namespace NM.States
                 new GameFactory(_services.Single<AssetProvider>(),
                     _services.Single<StaticDataService>(),
                     _services.Single<InputService>(),
-                    _services.Single<WindowService>()));
+                    _services.Single<WindowService>(),
+                    _services.Single<PersistentProgressService>()));
             _services.RegisterSingle<SaveLoadService>(new SaveLoadService(_services.Single<GameFactory>(),
                 _services.Single<PersistentProgressService>()));
             _services.RegisterSingle<GameLoopService>(new GameLoopService(_gameStateMachine,

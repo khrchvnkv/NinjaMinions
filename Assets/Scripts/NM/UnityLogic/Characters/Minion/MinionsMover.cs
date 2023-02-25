@@ -3,6 +3,7 @@ using NM.Services;
 using NM.Services.Factory;
 using NM.Services.GameLoop;
 using NM.Services.Input;
+using NM.Services.PersistentProgress;
 using NM.Services.UIWindows;
 using NM.UnityLogic.UI;
 using UnityEngine;
@@ -16,15 +17,17 @@ namespace NM.UnityLogic.Characters.Minion
         private GameLoopService _gameLoopService;
         private InputService _inputService;
         private WindowService _windowService;
+        private PersistentProgressService _progressService;
 
         private CameraFollow _cameraFollow;
         private int _currentMinionIndex;
 
-        public void Construct(InputService inputService, WindowService windowService)
+        public void Construct(InputService inputService, WindowService windowService, PersistentProgressService progressService)
         {
             _gameLoopService = AllServices.Container.Single<GameLoopService>();
             _inputService = inputService;
             _windowService = windowService;
+            _progressService = progressService;
             _cameraFollow = Camera.main.GetComponent<CameraFollow>();
             _inputService.OnInputActivated += StartLogic;
         }
@@ -76,7 +79,7 @@ namespace NM.UnityLogic.Characters.Minion
         {
             var currentMinion = _minions[_currentMinionIndex];
             _windowService.GameHUD.Hide<HudWindowData>();
-            _windowService.GameHUD.Show(new HudWindowData(_gameLoopService, currentMinion.MinionHp));
+            _windowService.GameHUD.Show(new HudWindowData(_gameLoopService, _progressService, currentMinion.MinionHp));
         }
         private void UpdateCameraTarget()
         {

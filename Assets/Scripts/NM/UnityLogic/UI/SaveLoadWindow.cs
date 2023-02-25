@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NM.Services.GameLoop;
+using NM.Services.PersistentProgress;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +9,12 @@ namespace NM.UnityLogic.UI
     public class SaveLoadWindowData : IWindowData
     {
         public readonly GameLoopService GameLoopService;
+        public readonly PersistentProgressService ProgressService;
         
-        public SaveLoadWindowData(GameLoopService gameLoopService)
+        public SaveLoadWindowData(GameLoopService gameLoopService, PersistentProgressService progressService)
         {
             GameLoopService = gameLoopService;
+            ProgressService = progressService;
         }
     }
     public class SaveLoadWindow : WindowBase<SaveLoadWindowData>
@@ -24,7 +27,7 @@ namespace NM.UnityLogic.UI
             base.Show(windowData);
             _closeBtn.onClick.AddListener(OnCloseBtnClicked);
             _restartLevelBtn.onClick.AddListener(OnRestartBtnClicked);
-            _slots.ForEach(s => s.Construct(WindowData.GameLoopService, GameHUD));
+            _slots.ForEach(s => s.Construct(WindowData.GameLoopService, WindowData.ProgressService, GameHUD));
         }
         public override void Hide()
         {

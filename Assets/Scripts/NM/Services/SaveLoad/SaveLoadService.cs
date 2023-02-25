@@ -1,4 +1,6 @@
-﻿using NM.Data;
+﻿using System;
+using System.Globalization;
+using NM.Data;
 using NM.Services.Factory;
 using NM.Services.PersistentProgress;
 using UnityEngine;
@@ -20,6 +22,7 @@ namespace NM.Services.SaveLoad
         }
         public void SaveProgress()
         {
+            _progressService.Progress.LevelState.SaveTimestamp = DateTime.Now.ToString(CultureInfo.InvariantCulture);
             _progressService.Progress.LevelState.Level = SceneManager.GetActiveScene().name;
             _progressService.Progress.LevelState.MinionsData.Clear();
             _progressService.Progress.LevelState.EnemiesData.Clear();

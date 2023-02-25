@@ -45,8 +45,9 @@ namespace NM.Services.GameLoop
         }
         private void LoadScene(string sceneKey)
         {
+            var saveTime = _persistentProgressService.Progress.LevelState.SaveTimestamp;
             _persistentProgressService.Progress.LevelState =
-                new LevelState(sceneKey);
+                new LevelState(sceneKey, saveTime);
             _inputService.Deactivate();
             _gameStateMachine.Enter<LoadLevelState>(sceneKey);
         }

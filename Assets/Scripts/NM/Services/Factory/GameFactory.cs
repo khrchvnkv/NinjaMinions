@@ -28,6 +28,7 @@ namespace NM.Services.Factory
         private readonly StaticDataService _staticData;
         private readonly InputService _inputService;
         private readonly WindowService _windowService;
+        private readonly PersistentProgressService _progressService;
 
         private MinionsMover _mover;
 
@@ -37,19 +38,20 @@ namespace NM.Services.Factory
 
         public event Action OnCleanedUp;
 
-        public GameFactory(AssetProvider assets, StaticDataService staticData, 
-            InputService inputService, WindowService windowService)
+        public GameFactory(AssetProvider assets, StaticDataService staticData, InputService inputService, 
+            WindowService windowService, PersistentProgressService progressService)
         {
             _assets = assets;
             _staticData = staticData;
             _inputService = inputService;
             _windowService = windowService;
+            _progressService = progressService;
         }
         public GameObject CreateMinionsMover()
         {
             var mover = InstantiateRegistered(MinionsMover);
             _mover = mover.GetComponent<MinionsMover>();
-            _mover.Construct(_inputService, _windowService);
+            _mover.Construct(_inputService, _windowService, _progressService);
             return mover;
         }
         public GameObject CreateMinion(string minionId, Transform parent)

@@ -745,6 +745,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c9fb8d563e24399a3b74fa04dd99fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _slotInfoText: {fileID: 3945918654194974066}
   _saveBtn: {fileID: 6124513940495980360}
   _loadBtn: {fileID: 6854045377457900493}
 --- !u!1 &3796933230767182776
