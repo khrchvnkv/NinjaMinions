@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NM.StaticData;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NM.Services.StaticData
 {
@@ -11,7 +12,7 @@ namespace NM.Services.StaticData
         private const string LevelDataPath = "StaticData/Levels";
         private const string MinionDataPath = "StaticData/Minions/MinionData";
         private const string EnemiesDataPath = "StaticData/Enemies";
-        
+
         private Dictionary<string, LevelStaticData> _levelData;
         private Dictionary<EnemyStaticData.EnemyTypeId, EnemyStaticData> _enemies;
 
@@ -42,6 +43,26 @@ namespace NM.Services.StaticData
             }
 
             throw new Exception($"No {sceneKey} level static data");
+        }
+        public string GetNextLevelSceneKey(string currentSceneKey)
+        {
+            var levelDataCollection = _levelData.Values.ToArray();
+            var currentSceneIndex = 0;
+            for (int i = 0; i < levelDataCollection.Length; i++)
+            {
+                if (levelDataCollection[i].LevelKey == currentSceneKey)
+                {
+                    currentSceneIndex = i;
+                    break;
+                }
+            }
+            var nextSceneIndex = currentSceneIndex + 1;
+            if (nextSceneIndex >= levelDataCollection.Length)
+            {
+                nextSceneIndex = 0;
+            }
+
+            return levelDataCollection[nextSceneIndex].LevelKey;
         }
     }
 }

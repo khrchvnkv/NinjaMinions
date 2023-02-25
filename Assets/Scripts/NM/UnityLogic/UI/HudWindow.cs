@@ -1,5 +1,4 @@
-﻿using NM.Services.Input;
-using NM.Services.PersistentProgress;
+﻿using NM.Services.GameLoop;
 using NM.UnityLogic.Characters.Minion;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,17 +7,12 @@ namespace NM.UnityLogic.UI
 {
     public class HudWindowData : IWindowData
     {
-        public readonly GameStateMachine GameStateMachine;
-        public readonly InputService InputService;
-        public readonly PersistentProgressService PersistentProgressService;
+        public readonly GameLoopService GameLoopService;
         public readonly IHealthCharacter HealthCharacter;
 
-        public HudWindowData(GameStateMachine gameStateMachine, InputService inputService,
-            PersistentProgressService persistentProgressService, IHealthCharacter character)
+        public HudWindowData(GameLoopService gameLoopService, IHealthCharacter character)
         {
-            GameStateMachine = gameStateMachine;
-            InputService = inputService;
-            PersistentProgressService = persistentProgressService;
+            GameLoopService = gameLoopService;
             HealthCharacter = character;
         }
     }
@@ -47,8 +41,7 @@ namespace NM.UnityLogic.UI
         private void OpenSaveLoadSettings()
         {
             Time.timeScale = 0.0f;
-            GameHUD.Show(new SaveLoadWindowData(WindowData.GameStateMachine, WindowData.InputService,
-                WindowData.PersistentProgressService));
+            GameHUD.Show(new SaveLoadWindowData(WindowData.GameLoopService));
         }
         private void SetMaxHp(int maxHp) => _hpSlider.maxValue = maxHp;
         private void ChangeHp(int newHpValue) => _hpSlider.value = newHpValue;

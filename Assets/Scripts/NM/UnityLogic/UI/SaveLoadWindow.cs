@@ -1,30 +1,17 @@
 ﻿using System.Collections.Generic;
-using NM.Data;
-using NM.Services;
-using NM.Services.Input;
-using NM.Services.PersistentProgress;
-using NM.Services.SaveLoad;
-using NM.States;
+using NM.Services.GameLoop;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace NM.UnityLogic.UI
 {
     public class SaveLoadWindowData : IWindowData
     {
-        public readonly GameStateMachine GameStateMachine;
-        public readonly InputService InputService;
-        public readonly PersistentProgressService PersistentProgressService;
-        public readonly SaveLoadService SaveLoadService;
-
-        public SaveLoadWindowData(GameStateMachine gameStateMachine, InputService inputService,
-            PersistentProgressService persistentProgressService)
+        public readonly GameLoopService GameLoopService;
+        
+        public SaveLoadWindowData(GameLoopService gameLoopService)
         {
-            GameStateMachine = gameStateMachine;
-            InputService = inputService;
-            PersistentProgressService = persistentProgressService;
-            SaveLoadService = AllServices.Container.Single<SaveLoadService>();
+            GameLoopService = gameLoopService;
         }
     }
     public class SaveLoadWindow : WindowBase<SaveLoadWindowData>
@@ -37,8 +24,7 @@ namespace NM.UnityLogic.UI
             base.Show(windowData);
             _closeBtn.onClick.AddListener(OnCloseBtnClicked);
             _restartLevelBtn.onClick.AddListener(OnRestartBtnClicked);
-            _slots.ForEach(s => s.Construct(WindowData.GameStateMachine, WindowData.PersistentProgressService, 
-                WindowData.InputService, WindowData.SaveLoadService, GameHUD));
+            _slots.ForEach(s => s.Construct(WindowData.GameLoopService, GameHUD));
         }
         public override void Hide()
         {
@@ -50,11 +36,7 @@ namespace NM.UnityLogic.UI
         private void OnCloseBtnClicked() => GameHUD.Hide<SaveLoadWindowData>();
         private void OnRestartBtnClicked()
         {
-            var currentScene = SceneManager.GetActiveScene().name;
-            WindowData.PersistentProgressService.Progress.LevelState =
-                new LevelState(currentScene);
-            WindowData.InputService.Deactivate();
-            WindowData.GameStateMachine.Enter<LoadLevelState>(currentScene);
+            WindowData.GameLoopService.RestartLevel();
             Hide();
         }
     }

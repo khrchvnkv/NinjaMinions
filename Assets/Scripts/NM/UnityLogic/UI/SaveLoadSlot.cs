@@ -1,8 +1,6 @@
 ﻿using NM.Services;
-using NM.Services.Input;
-using NM.Services.PersistentProgress;
+using NM.Services.GameLoop;
 using NM.Services.SaveLoad;
-using NM.States;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,19 +11,12 @@ namespace NM.UnityLogic.UI
         [SerializeField] private Button _saveBtn;
         [SerializeField] private Button _loadBtn;
 
-        private GameStateMachine _gameStateMachine;
-        private PersistentProgressService _progressService;
-        private InputService _inputService;
-        private SaveLoadService _saveLoadService;
+        private GameLoopService _gameLoopService;
         private GameHUD _gameHUD;
 
-        public void Construct(GameStateMachine gameStateMachine, PersistentProgressService progressService,
-            InputService inputService, SaveLoadService saveLoadService, GameHUD gameHUD)
+        public void Construct(GameLoopService gameLoopService, GameHUD gameHUD)
         {
-            _gameStateMachine = gameStateMachine;
-            _progressService = progressService;
-            _inputService = inputService;
-            _saveLoadService = saveLoadService;
+            _gameLoopService = gameLoopService;
             _gameHUD = gameHUD;
         }
         private void OnEnable()
@@ -41,10 +32,11 @@ namespace NM.UnityLogic.UI
         private void SaveProgress() => AllServices.Container.Single<SaveLoadService>().SaveProgress();
         private void LoadProgress()
         {
-            _inputService.Deactivate();
-            _gameHUD.Hide<SaveLoadWindowData>();
-            _progressService.Progress = _saveLoadService.LoadProgress();
-            _gameStateMachine.Enter<LoadLevelState>(_progressService.Progress.LevelState.Level);
+            if (_gameLoopService.CanReloadProgress())
+            {
+                _gameHUD.Hide<SaveLoadWindowData>();
+                _gameLoopService.ReloadProgress();
+            }
         }
     }
 }

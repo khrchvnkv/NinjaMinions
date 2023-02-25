@@ -31,5 +31,6 @@ namespace NM.Services.SaveLoad
             PlayerPrefs.SetString(ProgressKey, _progressService.Progress.ToJson());
         }
         public ProgressData LoadProgress() => PlayerPrefs.GetString(ProgressKey)?.ToDeserialized<ProgressData>();
+        public bool HasSavedData() => PlayerPrefs.HasKey(ProgressKey);
     }
 }

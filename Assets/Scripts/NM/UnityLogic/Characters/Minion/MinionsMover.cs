@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using NM.Services;
 using NM.Services.Factory;
+using NM.Services.GameLoop;
 using NM.Services.Input;
-using NM.Services.PersistentProgress;
 using NM.Services.UIWindows;
 using NM.UnityLogic.UI;
 using UnityEngine;
@@ -12,21 +13,18 @@ namespace NM.UnityLogic.Characters.Minion
     {
         private List<MinionContainer> _minions = new List<MinionContainer>();
 
-        private GameStateMachine _gameStateMachine;
+        private GameLoopService _gameLoopService;
         private InputService _inputService;
         private WindowService _windowService;
-        private PersistentProgressService _persistentProgressService;
 
         private CameraFollow _cameraFollow;
         private int _currentMinionIndex;
 
-        public void Construct(GameStateMachine gameStateMachine, InputService inputService, 
-            WindowService windowService, PersistentProgressService persistentProgressService)
+        public void Construct(InputService inputService, WindowService windowService)
         {
-            _gameStateMachine = gameStateMachine;
+            _gameLoopService = AllServices.Container.Single<GameLoopService>();
             _inputService = inputService;
             _windowService = windowService;
-            _persistentProgressService = persistentProgressService;
             _cameraFollow = Camera.main.GetComponent<CameraFollow>();
             _inputService.OnInputActivated += StartLogic;
         }
@@ -78,8 +76,7 @@ namespace NM.UnityLogic.Characters.Minion
         {
             var currentMinion = _minions[_currentMinionIndex];
             _windowService.GameHUD.Hide<HudWindowData>();
-            _windowService.GameHUD.Show(new HudWindowData(_gameStateMachine, _inputService, _persistentProgressService, 
-                currentMinion.MinionHp));
+            _windowService.GameHUD.Show(new HudWindowData(_gameLoopService, currentMinion.MinionHp));
         }
         private void UpdateCameraTarget()
         {

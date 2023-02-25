@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NM.Services.AssetManagement;
+using NM.Services.GameLoop;
 using NM.Services.Input;
 using NM.Services.PersistentProgress;
 using NM.Services.StaticData;
@@ -8,6 +10,7 @@ using NM.StaticData;
 using NM.UnityLogic.Characters.Enemies;
 using NM.UnityLogic.Characters.Minion;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace NM.Services.Factory
 {
@@ -21,12 +24,10 @@ namespace NM.Services.Factory
         
         private const string HUD = "HUD/HUD";
 
-        private readonly GameStateMachine _gameStateMachine;
         private readonly AssetProvider _assets;
         private readonly StaticDataService _staticData;
         private readonly InputService _inputService;
         private readonly WindowService _windowService;
-        private readonly PersistentProgressService _persistentProgressService;
 
         private MinionsMover _mover;
 
@@ -34,21 +35,21 @@ namespace NM.Services.Factory
         public List<ISavedProgressReader> ProgressReaders { get; } = new List<ISavedProgressReader>();
         public List<ISavedProgressWriter> ProgressWriters { get; } = new List<ISavedProgressWriter>();
 
-        public GameFactory(GameStateMachine gameStateMachine, AssetProvider assets, StaticDataService staticData, 
-            InputService inputService, WindowService windowService, PersistentProgressService persistentProgressService)
+        public event Action OnCleanedUp;
+
+        public GameFactory(AssetProvider assets, StaticDataService staticData, 
+            InputService inputService, WindowService windowService)
         {
-            _gameStateMachine = gameStateMachine;
             _assets = assets;
             _staticData = staticData;
             _inputService = inputService;
             _windowService = windowService;
-            _persistentProgressService = persistentProgressService;
         }
         public GameObject CreateMinionsMover()
         {
             var mover = InstantiateRegistered(MinionsMover);
             _mover = mover.GetComponent<MinionsMover>();
-            _mover.Construct(_gameStateMachine, _inputService, _windowService, _persistentProgressService);
+            _mover.Construct(_inputService, _windowService);
             return mover;
         }
         public GameObject CreateMinion(string minionId, Transform parent)
@@ -93,6 +94,7 @@ namespace NM.Services.Factory
                 clearable?.Clear();
             }
             _clearables.Clear();
+            OnCleanedUp?.Invoke();
         }
         private GameObject InstantiateRegistered(GameObject prefab, Transform parent)
         {

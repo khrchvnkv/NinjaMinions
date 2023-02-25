@@ -1,6 +1,7 @@
 ﻿using NM.Services;
 using NM.Services.AssetManagement;
 using NM.Services.Factory;
+using NM.Services.GameLoop;
 using NM.Services.Input;
 using NM.Services.PersistentProgress;
 using NM.Services.SaveLoad;
@@ -38,14 +39,17 @@ namespace NM.States
             RegisterStaticData();
             _services.RegisterSingle<WindowService>(new WindowService());
             _services.RegisterSingle<GameFactory>(
-                new GameFactory(_gameStateMachine,
-                    _services.Single<AssetProvider>(),
+                new GameFactory(_services.Single<AssetProvider>(),
                     _services.Single<StaticDataService>(),
                     _services.Single<InputService>(),
-                    _services.Single<WindowService>(),
-                    _services.Single<PersistentProgressService>()));
+                    _services.Single<WindowService>()));
             _services.RegisterSingle<SaveLoadService>(new SaveLoadService(_services.Single<GameFactory>(),
                 _services.Single<PersistentProgressService>()));
+            _services.RegisterSingle<GameLoopService>(new GameLoopService(_gameStateMachine,
+                _services.Single<PersistentProgressService>(),
+                _services.Single<InputService>(),
+                _services.Single<SaveLoadService>(),
+                _services.Single<StaticDataService>()));
         }
         private void RegisterStaticData()
         {
