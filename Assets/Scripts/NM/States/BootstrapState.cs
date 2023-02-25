@@ -5,13 +5,13 @@ using NM.Services.Input;
 using NM.Services.PersistentProgress;
 using NM.Services.SaveLoad;
 using NM.Services.StaticData;
+using NM.Services.UIWindows;
 
 namespace NM.States
 {
     public class BootstrapState : IState
     {
         private const string Initial = "Init";
-        private const string Main = "Main";
         
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
@@ -36,10 +36,14 @@ namespace NM.States
             _services.RegisterSingle<AssetProvider>(new AssetProvider());
             _services.RegisterSingle<PersistentProgressService>(new PersistentProgressService());
             RegisterStaticData();
+            _services.RegisterSingle<WindowService>(new WindowService());
             _services.RegisterSingle<GameFactory>(
-                new GameFactory(AllServices.Container.Single<AssetProvider>(),
-                                            AllServices.Container.Single<StaticDataService>(),
-                                            AllServices.Container.Single<InputService>()));
+                new GameFactory(_gameStateMachine,
+                    _services.Single<AssetProvider>(),
+                    _services.Single<StaticDataService>(),
+                    _services.Single<InputService>(),
+                    _services.Single<WindowService>(),
+                    _services.Single<PersistentProgressService>()));
             _services.RegisterSingle<SaveLoadService>(new SaveLoadService(_services.Single<GameFactory>(),
                 _services.Single<PersistentProgressService>()));
         }

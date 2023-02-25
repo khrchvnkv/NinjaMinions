@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2c6fab7b5d54157baf06c773327c17c, type: 3}
+  m_Name: Level_2
+  m_EditorClassIdentifier: 
+  LevelKey: Level_2
+  MinionSpawners:
+  - Id: Level_2_5c9c0b23-eb60-4c66-9e04-a8a87e3b4cdf
+    SpawnPosition: {x: 7.83, y: 0, z: -3.58}
+  EnemySpawners:
+  - Id: Level_2_cf0a3890-0234-4e63-9407-7ef56a65dbd4
+    EnemyTypeId: 0
+    SpawnPosition: {x: 2.39, y: 0, z: 2.66}

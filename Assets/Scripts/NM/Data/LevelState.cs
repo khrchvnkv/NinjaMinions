@@ -7,7 +7,7 @@ namespace NM.Data
     public class LevelState
     {
         public string Level;
-        public List<CharacterData> MinionsData = new List<CharacterData>();
+        public List<HealthCharacterData> MinionsData = new List<HealthCharacterData>();
         public List<CharacterData> EnemiesData = new List<CharacterData>();
 
         public LevelState(string level)

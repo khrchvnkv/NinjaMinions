@@ -9,15 +9,19 @@ namespace NM.Services.StaticData
     public class StaticDataService : IService
     {
         private const string LevelDataPath = "StaticData/Levels";
+        private const string MinionDataPath = "StaticData/Minions/MinionData";
         private const string EnemiesDataPath = "StaticData/Enemies";
         
         private Dictionary<string, LevelStaticData> _levelData;
         private Dictionary<EnemyStaticData.EnemyTypeId, EnemyStaticData> _enemies;
 
+        public MinionStaticData MinionStaticData { get; private set; }
+        
         public void LoadData()
         {
             _levelData = Resources.LoadAll<LevelStaticData>(LevelDataPath)
                 .ToDictionary(x => x.LevelKey, x => x);
+            MinionStaticData = Resources.Load<MinionStaticData>(MinionDataPath);
             _enemies = Resources.LoadAll<EnemyStaticData>(EnemiesDataPath)
                 .ToDictionary(x => x.EnemyType, x => x);
         }

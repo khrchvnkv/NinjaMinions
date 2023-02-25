@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Minion
 {
-    public class MinionSpawnPoint : MonoBehaviour
+    public class MinionSpawnPoint : MonoBehaviour, IClearable
     {
         public string Id { get; private set; }
 
@@ -18,17 +18,10 @@ namespace NM.UnityLogic.Characters.Minion
             // Check and spawn
             Spawn();
         }
-        public void SaveProgress(ProgressData progress)
-        {
-            
-        }
-        public void LoadProgress(ProgressData progress)
-        {
-            
-        }
+        public void Clear() => Destroy(gameObject);
         private void Spawn()
         {
-            _gameFactory.CreateMinion(transform);
+            _gameFactory.CreateMinion(Id, transform);
         }
     }
 }

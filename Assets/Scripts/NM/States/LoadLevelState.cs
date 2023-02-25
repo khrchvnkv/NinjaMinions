@@ -34,10 +34,14 @@ namespace NM.States
         }
         private void OnLoaded()
         {
+            InitHud();
             InitSpawners();
-            InitGameWorld();
             InformProgressReaders();
             _gameStateMachine.Enter<GameLoopState>();
+        }
+        private void InitHud()
+        {
+            _gameFactory.CreateHud();
         }
         private void InitSpawners()
         {
@@ -53,10 +57,6 @@ namespace NM.States
             {
                 _gameFactory.CreateEnemySpawner(enemySpawner.SpawnPosition, enemySpawner.Id, enemySpawner.EnemyTypeId);
             }
-        }
-        private void InitGameWorld()
-        {
-            _gameFactory.CreateHUD();
         }
         private void InformProgressReaders()
         {

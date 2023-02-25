@@ -1,20 +1,26 @@
-﻿using NM.Services;
-using NM.Services.Input;
+﻿using NM.Data;
+using NM.Services.PersistentProgress;
 using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Minion
 {
-    public class MinionMove : MonoBehaviour
+    public class MinionMove : MonoBehaviour, ISavedProgressWriter
     {
-        private const float _movementSpeed = 2.0f;
-
         [SerializeField] private CharacterController _characterController;
 
         private Transform _camera;
+        
+        private string _id;
+        private float _movementSpeed;
 
         private void Start()
         {
             _camera = Camera.main.transform;
+        }
+        public void Construct(string id, float movementSpeed)
+        {
+            _id = id;
+            _movementSpeed = movementSpeed;
         }
         public void Move(Vector3 axis)
         {
@@ -24,6 +30,35 @@ namespace NM.UnityLogic.Characters.Minion
 
             movementVector += Physics.gravity;
             _characterController.Move(movementVector * _movementSpeed * Time.deltaTime);
+        }
+        public void LoadProgress(ProgressData progress)
+        {
+            foreach (var minion in progress.LevelState.MinionsData)
+            {
+                if (minion.Id == _id)
+                {
+                    _characterController.enabled = false;
+                    _characterController.transform.position = minion.Position.AsUnityVector();
+                    _characterController.enabled = true;
+                    return;
+                }
+            }
+        }
+        public void SaveProgress(ProgressData progress)
+        {
+            var newPositionData = _characterController.transform.position.AsVector3Data();
+            foreach (var minion in progress.LevelState.MinionsData)
+            {
+                if (minion.Id == _id)
+                {
+                    minion.Position = newPositionData;
+                    return;
+                }
+            }
+
+            var newMinionData = new HealthCharacterData();
+            newMinionData.Position = newPositionData;
+            progress.LevelState.MinionsData.Add(newMinionData);
         }
     }
 }

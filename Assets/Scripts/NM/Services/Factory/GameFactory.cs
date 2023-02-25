@@ -3,6 +3,7 @@ using NM.Services.AssetManagement;
 using NM.Services.Input;
 using NM.Services.PersistentProgress;
 using NM.Services.StaticData;
+using NM.Services.UIWindows;
 using NM.StaticData;
 using NM.UnityLogic.Characters.Enemies;
 using NM.UnityLogic.Characters.Minion;
@@ -14,38 +15,49 @@ namespace NM.Services.Factory
     {
         private const string MinionsMover = "Characters/MinionsMover";
         private const string CharactersMinion = "Characters/Minion";
-        private const string HUD = "HUD/HUD";
         
         private const string MinionSpawner = "Characters/Minions/MinionSpawnPoint";
         private const string EnemySpawner = "Characters/Enemies/EnemySpawnPoint";
+        
+        private const string HUD = "HUD/HUD";
 
+        private readonly GameStateMachine _gameStateMachine;
         private readonly AssetProvider _assets;
         private readonly StaticDataService _staticData;
         private readonly InputService _inputService;
+        private readonly WindowService _windowService;
+        private readonly PersistentProgressService _persistentProgressService;
 
         private MinionsMover _mover;
 
+        private readonly List<IClearable> _clearables = new List<IClearable>();
         public List<ISavedProgressReader> ProgressReaders { get; } = new List<ISavedProgressReader>();
         public List<ISavedProgressWriter> ProgressWriters { get; } = new List<ISavedProgressWriter>();
 
-        public GameFactory(AssetProvider assets, StaticDataService staticData, InputService inputService)
+        public GameFactory(GameStateMachine gameStateMachine, AssetProvider assets, StaticDataService staticData, 
+            InputService inputService, WindowService windowService, PersistentProgressService persistentProgressService)
         {
+            _gameStateMachine = gameStateMachine;
             _assets = assets;
             _staticData = staticData;
             _inputService = inputService;
+            _windowService = windowService;
+            _persistentProgressService = persistentProgressService;
         }
         public GameObject CreateMinionsMover()
         {
             var mover = InstantiateRegistered(MinionsMover);
             _mover = mover.GetComponent<MinionsMover>();
-            _mover.Construct(_inputService);
+            _mover.Construct(_gameStateMachine, _inputService, _windowService, _persistentProgressService);
             return mover;
         }
-        public GameObject CreateHUD() => InstantiateRegistered(HUD);
-        public GameObject CreateMinion(Transform parent)
+        public GameObject CreateMinion(string minionId, Transform parent)
         {
             var minion = InstantiateRegistered(CharactersMinion, parent);
-            _mover.AddMinion(minion.GetComponent<MinionMove>());
+            var minionStaticData = _staticData.MinionStaticData;
+            var minionContainer = minion.GetComponent<MinionContainer>();
+            _mover.AddMinion(minionContainer);
+            minionContainer.Construct(minionId, minionStaticData.MaxHp, minionStaticData.MovementSpeed);
             return minion;
         }
         public void CreateMinionSpawner(Vector3 at, string spawnerId)
@@ -66,10 +78,21 @@ namespace NM.Services.Factory
             var enemySpawner = spawner.GetComponent<EnemySpawnPoint>();
             enemySpawner.Construct(this, spawnerId, enemyType);
         }
+        public GameObject CreateHud()
+        {
+            var hud = InstantiateRegistered(HUD);
+            _windowService.RegisterHud(hud);
+            return hud;
+        }
         public void Cleanup()
         {
             ProgressReaders.Clear();
             ProgressWriters.Clear();
+            foreach (var clearable in _clearables)
+            {
+                clearable?.Clear();
+            }
+            _clearables.Clear();
         }
         private GameObject InstantiateRegistered(GameObject prefab, Transform parent)
         {
@@ -98,6 +121,10 @@ namespace NM.Services.Factory
         }
         private void RegisterProgressListener(GameObject gameObject)
         {
+            if (gameObject.TryGetComponent(out IClearable clearable))
+            {
+                _clearables.Add(clearable);
+            }
             foreach (var reader in gameObject.GetComponentsInChildren<ISavedProgressReader>())
             {
                 Register(reader);

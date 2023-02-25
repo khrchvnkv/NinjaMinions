@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1054433078840739157}
   - component: {fileID: 1054433078840739154}
+  - component: {fileID: 3638259705071348284}
+  - component: {fileID: 8740272193411468459}
   - component: {fileID: 2706664296352138434}
   m_Layer: 0
   m_Name: Minion
@@ -52,6 +54,32 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3638259705071348284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054433078840739155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6d30d5852364b56a0c79dc037a86b3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minionHp: {fileID: 8740272193411468459}
+  _minionMove: {fileID: 2706664296352138434}
+--- !u!114 &8740272193411468459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054433078840739155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a4043ac13db40b4924bfa314d9026bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2706664296352138434
 MonoBehaviour:
   m_ObjectHideFlags: 0

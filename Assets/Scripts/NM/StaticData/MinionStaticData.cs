@@ -6,6 +6,6 @@ namespace NM.StaticData
     public class MinionStaticData : ScriptableObject
     {
         [Range(1, 100)] public int MaxHp;
-        public GameObject Prefab;
+        [Range(0.1f, 5.0f)] public float MovementSpeed;
     }
 }

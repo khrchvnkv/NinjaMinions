@@ -2,6 +2,7 @@
 using NM.Services.Factory;
 using NM.Services.PersistentProgress;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NM.Services.SaveLoad
 {
@@ -19,6 +20,10 @@ namespace NM.Services.SaveLoad
         }
         public void SaveProgress()
         {
+            _progressService.Progress.LevelState.Level = SceneManager.GetActiveScene().name;
+            _progressService.Progress.LevelState.MinionsData.Clear();
+            _progressService.Progress.LevelState.EnemiesData.Clear();
+            
             foreach (var writer in _gameFactory.ProgressWriters)
             {
                 writer.SaveProgress(_progressService.Progress);
