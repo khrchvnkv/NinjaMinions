@@ -21,7 +21,8 @@ namespace NM
         public void Enter()
         {
             LoadProgress();
-            _gameStateMachine.Enter<LoadLevelState>(_progressService.Progress.LevelState.Level);
+            var slot = _progressService.Progress.CurrentSlot;
+            _gameStateMachine.Enter<LoadLevelState>(slot.Level);
         }
         public void Exit()
         {

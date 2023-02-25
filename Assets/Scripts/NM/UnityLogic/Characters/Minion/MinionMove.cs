@@ -31,9 +31,9 @@ namespace NM.UnityLogic.Characters.Minion
             movementVector += Physics.gravity;
             _characterController.Move(movementVector * _movementSpeed * Time.deltaTime);
         }
-        public void LoadProgress(ProgressData progress)
+        public void LoadProgress(SaveSlotData slot)
         {
-            foreach (var minion in progress.LevelState.MinionsData)
+            foreach (var minion in slot.MinionsData)
             {
                 if (minion.Id == _id)
                 {
@@ -44,10 +44,10 @@ namespace NM.UnityLogic.Characters.Minion
                 }
             }
         }
-        public void SaveProgress(ProgressData progress)
+        public void SaveProgress(SaveSlotData slot)
         {
             var newPositionData = _characterController.transform.position.AsVector3Data();
-            foreach (var minion in progress.LevelState.MinionsData)
+            foreach (var minion in slot.MinionsData)
             {
                 if (minion.Id == _id)
                 {
@@ -58,7 +58,7 @@ namespace NM.UnityLogic.Characters.Minion
 
             var newMinionData = new HealthCharacterData();
             newMinionData.Position = newPositionData;
-            progress.LevelState.MinionsData.Add(newMinionData);
+            slot.MinionsData.Add(newMinionData);
         }
     }
 }

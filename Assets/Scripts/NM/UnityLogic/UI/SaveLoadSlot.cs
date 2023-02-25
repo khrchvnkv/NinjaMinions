@@ -10,6 +10,7 @@ namespace NM.UnityLogic.UI
 {
     public class SaveLoadSlot : MonoBehaviour
     {
+        [SerializeField] private int _slotIndex;
         [SerializeField] private TMP_Text _slotInfoText;
         [SerializeField] private Button _saveBtn;
         [SerializeField] private Button _loadBtn;
@@ -37,23 +38,29 @@ namespace NM.UnityLogic.UI
         }
         private void SaveProgress()
         {
-            AllServices.Container.Single<SaveLoadService>().SaveProgress();
+            AllServices.Container.Single<SaveLoadService>().SaveProgress(_slotIndex);
             UpdateSlotInfoText();
         }
         private void LoadProgress()
         {
-            if (_gameLoopService.CanReloadProgress())
+            if (CanReloadProgress())
             {
                 _gameHUD.Hide<SaveLoadWindowData>();
-                _gameLoopService.ReloadProgress();
+                _gameLoopService.ReloadProgress(_slotIndex);
             }
+        }
+        private bool CanReloadProgress()
+        {
+            var slot = _progressService.Progress.GetSlotAt(_slotIndex);
+            return slot.IsSaved;
         }
         private void UpdateSlotInfoText()
         {
-            var saveTime = _progressService.Progress.LevelState.SaveTimestamp;
-            if (saveTime != default)
+            var slot = _progressService.Progress.GetSlotAt(_slotIndex);
+            var saveTimestamp = slot.SaveTimestamp;
+            if (!string.IsNullOrEmpty(saveTimestamp))
             {
-                _slotInfoText.text = $"{saveTime}";
+                _slotInfoText.text = $"{saveTimestamp}";
             }
         }
     }

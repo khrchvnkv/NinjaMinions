@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace NM.Data
 {
     [Serializable]
-    public class LevelState
+    public class SaveSlotData
     {
         public string SaveTimestamp;
         public string Level;
         public List<HealthCharacterData> MinionsData = new List<HealthCharacterData>();
         public List<CharacterData> EnemiesData = new List<CharacterData>();
+        public bool IsSaved;
 
-        public LevelState(string level)
+        public SaveSlotData() { }
+        public SaveSlotData(string level)
         {
             Level = level;
-            MinionsData.Clear();
-            EnemiesData.Clear();
-        }
-        public LevelState(string level, string savedTimestamp)
-        {
-            SaveTimestamp = savedTimestamp;
-            Level = level;
-            MinionsData.Clear();
-            EnemiesData.Clear();
         }
     }
 }

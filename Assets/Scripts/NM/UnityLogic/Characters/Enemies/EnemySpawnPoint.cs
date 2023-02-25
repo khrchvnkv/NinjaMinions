@@ -22,11 +22,11 @@ namespace NM.UnityLogic.Characters.Enemies
             
             // Check and spawn
         }
-        public void SaveProgress(ProgressData progress)
+        public void SaveProgress(SaveSlotData slot)
         {
             
         }
-        public void LoadProgress(ProgressData progress)
+        public void LoadProgress(SaveSlotData slot)
         {
             
         }

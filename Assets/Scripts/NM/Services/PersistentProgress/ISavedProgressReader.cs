@@ -4,6 +4,6 @@ namespace NM.Services.PersistentProgress
 {
     public interface ISavedProgressReader
     {
-        void LoadProgress(ProgressData progress);
+        void LoadProgress(SaveSlotData slotData);
     }
 }

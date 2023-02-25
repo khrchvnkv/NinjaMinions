@@ -26,9 +26,9 @@ namespace NM.UnityLogic.Characters.Minion
             HP -= damage;
             OnHpChanged?.Invoke(HP);
         }
-        public void SaveProgress(ProgressData progress)
+        public void SaveProgress(SaveSlotData slot)
         {
-            foreach (var minionData in progress.LevelState.MinionsData)
+            foreach (var minionData in slot.MinionsData)
             {
                 if (minionData.Id == _id)
                 {
@@ -40,11 +40,11 @@ namespace NM.UnityLogic.Characters.Minion
             var newHpData = new HealthCharacterData();
             newHpData.Id = _id;
             newHpData.Hp = HP;
-            progress.LevelState.MinionsData.Add(newHpData);
+            slot.MinionsData.Add(newHpData);
         }
-        public void LoadProgress(ProgressData progress)
+        public void LoadProgress(SaveSlotData slot)
         {
-            foreach (var minion in progress.LevelState.MinionsData)
+            foreach (var minion in slot.MinionsData)
             {
                 if (minion.Id == _id)
                 {

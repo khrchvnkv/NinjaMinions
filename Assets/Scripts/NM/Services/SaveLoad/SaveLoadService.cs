@@ -20,20 +20,22 @@ namespace NM.Services.SaveLoad
             _gameFactory = gameFactory;
             _progressService = progressService;
         }
-        public void SaveProgress()
+        public void SaveProgress(int slotIndex)
         {
-            _progressService.Progress.LevelState.SaveTimestamp = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-            _progressService.Progress.LevelState.Level = SceneManager.GetActiveScene().name;
-            _progressService.Progress.LevelState.MinionsData.Clear();
-            _progressService.Progress.LevelState.EnemiesData.Clear();
+            _progressService.Progress.CurrentSlotIndex = slotIndex;
+            var slot = _progressService.Progress.GetSlotAt(slotIndex);
+            slot.SaveTimestamp = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            slot.Level = SceneManager.GetActiveScene().name;
+            slot.MinionsData.Clear();
+            slot.EnemiesData.Clear();
+            slot.IsSaved = true;
             
             foreach (var writer in _gameFactory.ProgressWriters)
             {
-                writer.SaveProgress(_progressService.Progress);
+                writer.SaveProgress(slot);
             }
             PlayerPrefs.SetString(ProgressKey, _progressService.Progress.ToJson());
         }
         public ProgressData LoadProgress() => PlayerPrefs.GetString(ProgressKey)?.ToDeserialized<ProgressData>();
-        public bool HasSavedData() => PlayerPrefs.HasKey(ProgressKey);
     }
 }

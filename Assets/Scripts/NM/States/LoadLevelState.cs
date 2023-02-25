@@ -60,9 +60,10 @@ namespace NM.States
         }
         private void InformProgressReaders()
         {
+            var slot = _progressService.Progress.CurrentSlot;
             foreach (var reader in _gameFactory.ProgressReaders)
             {
-                reader.LoadProgress(_progressService.Progress);
+                reader.LoadProgress(slot);
             }
         }
         public void Exit()

@@ -25,12 +25,12 @@ namespace NM.Services.GameLoop
             _saveLoadService = saveLoadService;
             _staticDataService = staticDataService;
         }
-        public bool CanReloadProgress() => _saveLoadService.HasSavedData();
-        public void ReloadProgress()
+        public void ReloadProgress(int slotIndex)
         {
             _inputService.Deactivate();
-            _persistentProgressService.Progress = _saveLoadService.LoadProgress();
-            _gameStateMachine.Enter<LoadLevelState>(_persistentProgressService.Progress.LevelState.Level);
+            _persistentProgressService.Progress.CurrentSlotIndex = slotIndex;
+            var slot = _persistentProgressService.Progress.GetSlotAt(slotIndex);
+            _gameStateMachine.Enter<LoadLevelState>(slot.Level);
         }
         public void RestartLevel()
         {
@@ -45,9 +45,7 @@ namespace NM.Services.GameLoop
         }
         private void LoadScene(string sceneKey)
         {
-            var saveTime = _persistentProgressService.Progress.LevelState.SaveTimestamp;
-            _persistentProgressService.Progress.LevelState =
-                new LevelState(sceneKey, saveTime);
+            var slot = _persistentProgressService.Progress.CurrentSlot;
             _inputService.Deactivate();
             _gameStateMachine.Enter<LoadLevelState>(sceneKey);
         }
