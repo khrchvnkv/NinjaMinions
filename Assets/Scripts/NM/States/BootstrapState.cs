@@ -13,13 +13,16 @@ namespace NM.States
     public class BootstrapState : IState
     {
         private const string Initial = "Init";
-        
+
+        private readonly ICoroutineRunner _coroutineRunner;
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly AllServices _services;
 
-        public BootstrapState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, AllServices services)
+        public BootstrapState(ICoroutineRunner coroutineRunner, GameStateMachine gameStateMachine, 
+            SceneLoader sceneLoader, AllServices services)
         {
+            _coroutineRunner = coroutineRunner;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
             _services = services;
@@ -37,7 +40,7 @@ namespace NM.States
             _services.RegisterSingle<AssetProvider>(new AssetProvider());
             _services.RegisterSingle<PersistentProgressService>(new PersistentProgressService());
             RegisterStaticData();
-            _services.RegisterSingle<WindowService>(new WindowService());
+            _services.RegisterSingle<WindowService>(new WindowService(_coroutineRunner));
             _services.RegisterSingle<GameFactory>(
                 new GameFactory(_services.Single<AssetProvider>(),
                     _services.Single<StaticDataService>(),
@@ -49,7 +52,6 @@ namespace NM.States
             _services.RegisterSingle<GameLoopService>(new GameLoopService(_gameStateMachine,
                 _services.Single<PersistentProgressService>(),
                 _services.Single<InputService>(),
-                _services.Single<SaveLoadService>(),
                 _services.Single<StaticDataService>()));
         }
         private void RegisterStaticData()

@@ -1,4 +1,6 @@
-﻿namespace NM.States
+﻿using NM.Data;
+
+namespace NM.States
 {
     public interface IState : IExitableState
     {
@@ -10,6 +12,6 @@
     }
     public interface IPayloadedState : IExitableState
     {
-        void Enter(string payload);
+        void Enter(SaveSlotData slot);
     }
 }

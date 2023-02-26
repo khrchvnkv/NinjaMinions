@@ -83,6 +83,8 @@ namespace NM.Services.Factory
         }
         public GameObject CreateHud()
         {
+            if (_windowService.IsHudCreated) return _windowService.GameHUD.gameObject;
+            
             var hud = InstantiateRegistered(HUD);
             _windowService.RegisterHud(hud);
             return hud;

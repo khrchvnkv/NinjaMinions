@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NM.Data;
 using NM.LoadingView;
 using NM.Services;
 using NM.Services.Factory;
@@ -13,16 +14,15 @@ namespace NM
 {
     public class GameStateMachine
     {
-        private readonly LoadingCurtain _loadingCurtain;
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, LoadingCurtain loadingCurtain, AllServices services)
+        public GameStateMachine(ICoroutineRunner coroutineRunner, SceneLoader sceneLoader, 
+            LoadingCurtain loadingCurtain, AllServices services)
         {
-            _loadingCurtain = loadingCurtain;
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
+                [typeof(BootstrapState)] = new BootstrapState(coroutineRunner, this, sceneLoader, services),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, loadingCurtain,
                     services.Single<GameFactory>(), services.Single<PersistentProgressService>(),
                     services.Single<StaticDataService>()),
@@ -37,10 +37,10 @@ namespace NM
             var state = ChangeState<TState>();
             state.Enter();
         }
-        public void Enter<TState>(string payload) where TState : class, IPayloadedState
+        public void Enter<TState>(SaveSlotData slot) where TState : class, IPayloadedState
         {
             var state = ChangeState<TState>();
-            state.Enter(payload);
+            state.Enter(slot);
         }
         private TState ChangeState<TState>() where TState : class, IExitableState
         {

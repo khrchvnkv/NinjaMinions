@@ -69,8 +69,8 @@ MonoBehaviour:
     y: 0
     width: 279.2
     height: 448
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 118
+  controlID: 77
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -120,8 +120,8 @@ MonoBehaviour:
     y: 0
     width: 425.59998
     height: 740.4
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 63
+  controlID: 78
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 64
+  controlID: 79
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -296,8 +296,8 @@ MonoBehaviour:
     y: 0
     width: 584
     height: 448
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 18}
@@ -334,7 +334,7 @@ MonoBehaviour:
     m_SaveData: []
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 29636
+  m_LastSelectedObjectID: -102342
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -409,7 +409,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_SearchFilter:
-    m_NameFilter: HUD
+    m_NameFilter: Hud
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -421,22 +421,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/StaticData/Minions
+    - Assets/Scripts/NM
     m_Globs: []
-    m_OriginalText: HUD
+    m_OriginalText: Hud
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/StaticData/Minions
+  - Assets/Scripts/NM
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\HP\Documents\UnityProjects\NinjaMinions
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 36.599976}
-    m_SelectedIDs: f0730000
-    m_LastClickedID: 29680
-    m_ExpandedIDs: 00000000f05a0000145b00003e5b0000405b000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 52.599976}
+    m_SelectedIDs: 229b0000
+    m_LastClickedID: 39714
+    m_ExpandedIDs: 000000006e5b00009c5b0000a05b0000c65b000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -464,7 +464,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000f05a0000
+    m_ExpandedIDs: 000000006e5b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -508,7 +508,7 @@ MonoBehaviour:
       m_IsRenaming: 0
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 6}
+      m_ClientGUIView: {fileID: 12}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -592,9 +592,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 8a39feff
-      m_LastClickedID: -116342
-      m_ExpandedIDs: 8a39feff9039feff0e3afeff0446feff0a46feff1846feff5e46feff4c52feff5252feff6652feff6c52feffea52feff4654feff4c54feff6654feffe454feffb45bfeffc25bfeff085cfeff6ab6feff9eb9feff4a0cfffffa0effff9ca7ffffd0ebffff62f6ffff30fbfffff4ffffff5a5a00004e5c0000585c00000e61000012610000c0610000c4610000027e00000c7e0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 9ebafdffa4bafdffb8bafdffbebafdfff0bbfdff328dfeff3c8dfeff808dfeffca8dfeff5a95feff9e95feffe895feffc499feff089afeff529afeffe8b5feffeeb5feff02b6feff08b6feff08b7feff26c1feff2cc1feff46c2feff72c7feffeaf1feffa8f8feff3008fffff00bffff960fffff2a27ffff3c51ffff785bffff7e5bffff925bffff985bffff985cffffcc63ffffd263ffffe663ffffec63ffffec64ffff826cffff886cffff9c6cffffa26cffffa26dffffbc83ffffc283ffffd683ffffdc83ffffc884ffff7e99ffff8499ffff9899ffff9e99ffff8a9affffcc9dffffd29dffffd89effff5aaaffff60aaffff74aaffff7aaaffff66abffffe0b6ffffe6b6fffffab6ffff00b7ffffecb7ffff48bfffff4ebfffff62bfffff68bfffff54c0ffff06c4ffff1ac4ffff20c4ffff0cc5ffff62d7ffff68d7ffff6cd8ffff9edfffffacdffffff4dfffff30fbfffff4ffffffa05a0000ae5a0000a4720000108400001e840000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -610,7 +610,7 @@ MonoBehaviour:
         m_IsRenaming: 0
         m_OriginalEventType: 11
         m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 3}
+        m_ClientGUIView: {fileID: 2}
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -843,9 +843,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -8.87407, y: 2.6595485, z: 2.7296185}
+    m_Target: {x: -1.2957315, y: -3.0962303, z: -1.4608794}
     speed: 2
-    m_Value: {x: -8.87407, y: 2.6595485, z: 2.7296185}
+    m_Value: {x: -1.2957315, y: -3.0962303, z: -1.4608794}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -892,9 +892,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.07746281, y: -0.92209715, z: 0.28252214, w: 0.25282392}
+    m_Target: {x: 0.27385908, y: 0.6928207, z: -0.32600534, w: 0.5820004}
     speed: 2
-    m_Value: {x: 0.077462725, y: -0.92209613, z: 0.28252184, w: 0.25282365}
+    m_Value: {x: 0.27385864, y: 0.6928196, z: -0.3260048, w: 0.5819994}
   m_Size:
     m_Target: 10
     speed: 2
@@ -916,7 +916,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: 0.07746281, y: -0.92209715, z: 0.28252214, w: 0.25282392}
+  m_LastSceneViewRotation: {x: 0.27385908, y: 0.6928207, z: -0.32600534, w: 0.5820004}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 

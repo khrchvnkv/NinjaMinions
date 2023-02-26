@@ -1,4 +1,5 @@
-﻿using NM.LoadingView;
+﻿using NM.Data;
+using NM.LoadingView;
 using NM.Services.Factory;
 using NM.Services.PersistentProgress;
 using NM.Services.StaticData;
@@ -26,17 +27,17 @@ namespace NM.States
             _progressService = progressService;
             _staticDataService = staticDataService;
         }
-        public void Enter(string sceneName)
+        public void Enter(SaveSlotData slot)
         {
             _loadingCurtain.Show();
             _gameFactory.Cleanup();
-            _sceneLoader.Load(sceneName, OnLoaded);
+            _sceneLoader.Load(slot.Level, () => OnLoaded(slot));
         }
-        private void OnLoaded()
+        private void OnLoaded(SaveSlotData slot)
         {
             InitHud();
             InitSpawners();
-            InformProgressReaders();
+            InformProgressReaders(slot);
             _gameStateMachine.Enter<GameLoopState>();
         }
         private void InitHud()
@@ -58,9 +59,8 @@ namespace NM.States
                 _gameFactory.CreateEnemySpawner(enemySpawner.SpawnPosition, enemySpawner.Id, enemySpawner.EnemyTypeId);
             }
         }
-        private void InformProgressReaders()
+        private void InformProgressReaders(SaveSlotData slot)
         {
-            var slot = _progressService.Progress.CurrentSlot;
             foreach (var reader in _gameFactory.ProgressReaders)
             {
                 reader.LoadProgress(slot);

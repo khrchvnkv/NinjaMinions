@@ -17,5 +17,9 @@ namespace NM.States
             _game.StateMachine.Enter<BootstrapState>();  
             DontDestroyOnLoad(this);
         }
+        public void MarkAsDontDestroyOnLoad(MonoBehaviour monoBehaviour)
+        {
+            DontDestroyOnLoad(monoBehaviour.gameObject);
+        }
     }
 }
