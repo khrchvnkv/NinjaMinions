@@ -20,3 +20,6 @@ MonoBehaviour:
   - Id: Level_2_cf0a3890-0234-4e63-9407-7ef56a65dbd4
     EnemyTypeId: 0
     SpawnPosition: {x: 2.39, y: 0, z: 2.66}
+    Points:
+    - {x: 2.39, y: 0, z: 2.66}
+    - {x: -3.99, y: 0, z: -2.3099997}

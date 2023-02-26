@@ -1,4 +1,5 @@
 ﻿using NM.UnityLogic.Characters.Minion;
+using NM.UnityLogic.Characters.Minion.SpawnLogic;
 using UnityEditor;
 using UnityEngine;
 

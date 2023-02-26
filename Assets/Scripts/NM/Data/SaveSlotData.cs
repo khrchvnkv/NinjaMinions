@@ -9,7 +9,7 @@ namespace NM.Data
         public string SaveTimestamp;
         public string Level;
         public List<HealthCharacterData> MinionsData = new List<HealthCharacterData>();
-        public List<CharacterData> EnemiesData = new List<CharacterData>();
+        public List<EnemyData> EnemiesData = new List<EnemyData>();
         public bool IsSaved;
 
         public SaveSlotData() { }

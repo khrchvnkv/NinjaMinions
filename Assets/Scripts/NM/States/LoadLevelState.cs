@@ -52,11 +52,11 @@ namespace NM.States
             var levelStaticData = _staticDataService.GetLevelData(sceneKey);
             foreach (var minionSpawner in levelStaticData.MinionSpawners)
             {
-                _gameFactory.CreateMinionSpawner(minionSpawner.SpawnPosition, minionSpawner.Id);
+                _gameFactory.CreateMinionSpawner(minionSpawner);
             }
             foreach (var enemySpawner in levelStaticData.EnemySpawners)
             {
-                _gameFactory.CreateEnemySpawner(enemySpawner.SpawnPosition, enemySpawner.Id, enemySpawner.EnemyTypeId);
+                _gameFactory.CreateEnemySpawner(enemySpawner);
             }
         }
         private void InformProgressReaders(SaveSlotData slot)

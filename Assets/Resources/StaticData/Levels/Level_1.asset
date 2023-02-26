@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelKey: Level_1
   MinionSpawners:
-  - Id: Level_1_08995a92-b639-4382-8d9d-cf8b6ca39f5f
-    SpawnPosition: {x: -6.73, y: 0, z: 3.01}
   - Id: Level_1_e4edf492-b9fd-42d6-a5b9-738d65796661
     SpawnPosition: {x: -6.57, y: 0, z: -3.16}
+  - Id: Level_1_08995a92-b639-4382-8d9d-cf8b6ca39f5f
+    SpawnPosition: {x: -6.73, y: 0, z: 3.01}
   EnemySpawners:
   - Id: Level_1_8a7db992-bdb6-4049-bb29-c8775766466b
     EnemyTypeId: 0
     SpawnPosition: {x: 2.39, y: 0, z: 2.66}
+    Points:
+    - {x: -0.78, y: 0, z: 3.77}
+    - {x: 1.3000001, y: 0, z: -3.3099997}

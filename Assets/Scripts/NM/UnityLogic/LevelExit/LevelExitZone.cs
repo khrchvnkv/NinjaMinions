@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NM.Services;
 using NM.Services.Factory;
 using NM.Services.GameLoop;
@@ -12,6 +11,8 @@ namespace NM.UnityLogic.LevelExit
 {
     public class LevelExitZone : MonoBehaviour
     {
+        [SerializeField] private MinionTriggerObserver _minionTriggerObserver;
+        
         private List<MinionContainer> _enteredMinions = new List<MinionContainer>();
 
         private GameFactory _gameFactory;
@@ -32,13 +33,22 @@ namespace NM.UnityLogic.LevelExit
             var levelData = staticDataService.GetLevelData(sceneName);
             _neededMinionsCount = levelData.MinionSpawners.Count;   
         }
-        private void OnEnable() => _gameFactory.OnCleanedUp += ClearData;
-        private void OnDisable() => _gameFactory.OnCleanedUp -= ClearData;
-        private void ClearData() => _enteredMinions.Clear();
-        private void OnTriggerEnter(Collider other)
+        private void OnEnable()
         {
-            if (other.TryGetComponent(out MinionContainer minion) &&
-                !_enteredMinions.Contains(minion))
+            _gameFactory.OnCleanedUp += ClearData;
+            _minionTriggerObserver.OnMinionEntered += OnMinionEntered;
+            _minionTriggerObserver.OnMinionExited += OnMinionExited;
+        }
+        private void OnDisable()
+        {
+            _gameFactory.OnCleanedUp -= ClearData;
+            _minionTriggerObserver.OnMinionEntered -= OnMinionEntered;
+            _minionTriggerObserver.OnMinionExited -= OnMinionExited;
+        }
+        private void ClearData() => _enteredMinions.Clear();
+        private void OnMinionEntered(MinionContainer minion)
+        {
+            if (!_enteredMinions.Contains(minion))
             {
                 _enteredMinions.Add(minion);
                 if (_enteredMinions.Count >= _neededMinionsCount)
@@ -47,10 +57,9 @@ namespace NM.UnityLogic.LevelExit
                 }
             }
         }
-        private void OnTriggerExit(Collider other)
+        private void OnMinionExited(MinionContainer minion)
         {
-            if (other.TryGetComponent(out MinionContainer minion) &&
-                _enteredMinions.Contains(minion))
+            if (_enteredMinions.Contains(minion))
             {
                 _enteredMinions.Remove(minion);
             }

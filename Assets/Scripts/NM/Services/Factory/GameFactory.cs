@@ -8,7 +8,10 @@ using NM.Services.StaticData;
 using NM.Services.UIWindows;
 using NM.StaticData;
 using NM.UnityLogic.Characters.Enemies;
+using NM.UnityLogic.Characters.Enemies.Behaviour;
+using NM.UnityLogic.Characters.Enemies.SpawnLogic;
 using NM.UnityLogic.Characters.Minion;
+using NM.UnityLogic.Characters.Minion.SpawnLogic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -63,23 +66,27 @@ namespace NM.Services.Factory
             minionContainer.Construct(minionId, minionStaticData.MaxHp, minionStaticData.MovementSpeed);
             return minion;
         }
-        public void CreateMinionSpawner(Vector3 at, string spawnerId)
+        public void CreateMinionSpawner(MinionSpawnerData spawnerData)
         {
+            var at = spawnerData.SpawnPosition;
             var spawner = InstantiateRegistered(MinionSpawner, at);
             var minionSpawner = spawner.GetComponent<MinionSpawnPoint>();
-            minionSpawner.Construct(this, spawnerId);
+            minionSpawner.Construct(this, spawnerData.Id);
         }
-        public GameObject CreateEnemy(EnemyStaticData.EnemyTypeId enemyType, Transform parent)
+        public GameObject CreateEnemy(EnemySpawnerData spawnerData, Transform parent)
         {
-            var enemyData = _staticData.GetEnemyData(enemyType);
+            var enemyData = _staticData.GetEnemyData(spawnerData.EnemyTypeId);
             var enemy = InstantiateRegistered(enemyData.Prefab, parent);
+            var enemyConstruct = enemy.GetComponent<IEnemy>();
+            enemyConstruct.Construct(spawnerData.Id, enemyData, spawnerData.Points);
             return enemy;
         }
-        public void CreateEnemySpawner(Vector3 at, string spawnerId, EnemyStaticData.EnemyTypeId enemyType)
+        public void CreateEnemySpawner(EnemySpawnerData spawnerData)
         {
+            var at = spawnerData.SpawnPosition;
             var spawner = InstantiateRegistered(EnemySpawner, at);
             var enemySpawner = spawner.GetComponent<EnemySpawnPoint>();
-            enemySpawner.Construct(this, spawnerId, enemyType);
+            enemySpawner.Construct(this, spawnerData);
         }
         public GameObject CreateHud()
         {

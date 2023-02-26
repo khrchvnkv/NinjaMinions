@@ -7,12 +7,11 @@ namespace NM.StaticData
     {
         public enum EnemyTypeId
         {
-            Easy,
-            Hard
+            Patrolman
         }
 
         public EnemyTypeId EnemyType;
-        [Range(0.0f, 10.0f)] public float Damage;
+        [Range(0, 10)] public int Damage;
         [Range(0.0f, 10.0f)] public float Speed;
         [Range(0.0f, 5.0f)] public float AttackDistance;
         public GameObject Prefab;

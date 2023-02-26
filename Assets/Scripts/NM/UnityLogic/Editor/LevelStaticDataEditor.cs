@@ -2,7 +2,9 @@
 using NM.StaticData;
 using NM.UnityLogic.Characters;
 using NM.UnityLogic.Characters.Enemies;
+using NM.UnityLogic.Characters.Enemies.SpawnLogic;
 using NM.UnityLogic.Characters.Minion;
+using NM.UnityLogic.Characters.Minion.SpawnLogic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,7 +27,7 @@ namespace NM.UnityLogic.Editor
                     .ToList();
                 levelData.EnemySpawners = FindObjectsOfType<EnemySpawnMarker>()
                     .Select(x => new EnemySpawnerData(x.GetComponent<UniqueId>().Id,
-                        x.EnemyTypeId, x.transform.position))
+                        x.EnemyTypeId, x.transform.position, x.Points))
                     .ToList();
 
                 levelData.LevelKey = SceneManager.GetActiveScene().name;
