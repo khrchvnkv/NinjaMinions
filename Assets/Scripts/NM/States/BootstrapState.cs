@@ -4,6 +4,7 @@ using NM.Services.Factory;
 using NM.Services.GameLoop;
 using NM.Services.Input;
 using NM.Services.PersistentProgress;
+using NM.Services.Pool;
 using NM.Services.SaveLoad;
 using NM.Services.StaticData;
 using NM.Services.UIWindows;
@@ -41,12 +42,14 @@ namespace NM.States
             _services.RegisterSingle<PersistentProgressService>(new PersistentProgressService());
             RegisterStaticData();
             _services.RegisterSingle<WindowService>(new WindowService(_coroutineRunner));
+            _services.RegisterSingle<PoolService>(new PoolService(_services.Single<AssetProvider>()));
             _services.RegisterSingle<GameFactory>(
                 new GameFactory(_services.Single<AssetProvider>(),
                     _services.Single<StaticDataService>(),
                     _services.Single<InputService>(),
                     _services.Single<WindowService>(),
-                    _services.Single<PersistentProgressService>()));
+                    _services.Single<PersistentProgressService>(),
+                    _services.Single<PoolService>()));
             _services.RegisterSingle<SaveLoadService>(new SaveLoadService(_services.Single<GameFactory>(),
                 _services.Single<PersistentProgressService>()));
             _services.RegisterSingle<GameLoopService>(new GameLoopService(_gameStateMachine,

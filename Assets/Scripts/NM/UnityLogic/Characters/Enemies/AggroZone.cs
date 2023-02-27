@@ -14,6 +14,17 @@ namespace NM.UnityLogic.Characters.Enemies
         public event Action<MinionContainer> OnAggroZoneExited;
 
         public void SetZoneScale(float scaleMultiplier) => _colliderParent.localScale = Vector3.one * scaleMultiplier;
+        public void SetZoneActivity(bool isActive)
+        {
+            if (isActive)
+            {
+                _minionTriggerObserver.ActivateTrigger();
+            }
+            else
+            {
+                _minionTriggerObserver.DeactivateTrigger();
+            }
+        }
         private void OnEnable()
         {
             _minionTriggerObserver.OnMinionEntered += AggroAction;

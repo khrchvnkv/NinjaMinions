@@ -12,13 +12,18 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Sniper
         [SerializeField] private Transform _bulletSpawnPoint;
         private SniperBehaviour _sniperBehaviour;
 
-        public override void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
+        public override void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, 
+            List<Vector3> patrolPoints)
         {
             base.Construct(gameFactory, id, enemyData, patrolPoints);
             IdleBehaviour = new EmptyBehaviour();
             EnterBehaviour(IdleBehaviour);
-            var spawnPoint = transform;
-            _sniperBehaviour = new SniperBehaviour(gameFactory, StaticData, _bulletSpawnPoint, _bulletSpawnPoint);
+            _sniperBehaviour = new SniperBehaviour(gameFactory, StaticData, _bulletSpawnPoint);
+        }
+        public override void Clear()
+        {
+            base.Clear();
+            GameFactory.AddToPool<SniperEnemy>(gameObject);
         }
         protected override void OnEnable()
         {

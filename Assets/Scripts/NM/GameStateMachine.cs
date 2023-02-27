@@ -23,9 +23,8 @@ namespace NM
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(coroutineRunner, this, sceneLoader, services),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, loadingCurtain,
-                    services.Single<GameFactory>(), services.Single<PersistentProgressService>(),
-                    services.Single<StaticDataService>()),
+                [typeof(LoadLevelState)] = new LoadLevelState(coroutineRunner, this, sceneLoader, loadingCurtain,
+                    services.Single<GameFactory>(), services.Single<StaticDataService>()),
                 [typeof(LoadProgressState)] = new LoadProgressState(this, 
                     services.Single<PersistentProgressService>(),
                     services.Single<SaveLoadService>()),

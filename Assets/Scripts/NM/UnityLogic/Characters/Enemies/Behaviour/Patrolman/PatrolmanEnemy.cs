@@ -13,12 +13,19 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Patrolman
             IdleBehaviour = new PatrolBehaviour(Agent, transform, patrolPoints);
             EnterBehaviour(IdleBehaviour);
         }
+        public override void Clear()
+        {
+            base.Clear();
+            GameFactory.AddToPool<PatrolmanEnemy>(gameObject);
+        }
         protected override void OnEnable()
         {
+            base.OnEnable();
             AttackZone.OnAggroZoneEntered += AttackAction;
         }
         protected override void OnDisable()
         {
+            base.OnDisable();
             AttackZone.OnAggroZoneEntered -= AttackAction;
         }
     }

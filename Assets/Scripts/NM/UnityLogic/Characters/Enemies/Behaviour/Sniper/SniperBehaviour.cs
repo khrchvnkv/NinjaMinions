@@ -9,17 +9,14 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Sniper
         private readonly GameFactory _gameFactory;
         private readonly SniperStaticData _staticData;
 
-        private Transform _parent;
         private Transform _spawnPoint;
         private Transform _target;
         private float _cooldown;
 
-        public SniperBehaviour(GameFactory gameFactory, SniperStaticData staticData,
-            Transform parent, Transform spawnPoint)
+        public SniperBehaviour(GameFactory gameFactory, SniperStaticData staticData, Transform spawnPoint)
         {
             _gameFactory = gameFactory;
             _staticData = staticData;
-            _parent = parent;
             _spawnPoint = spawnPoint;
         }
         public void SetTarget(Transform target)
@@ -48,8 +45,7 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Sniper
             direction.Normalize();
             var bulletParams =
                 new BulletLogic.BulletParams(_staticData.BulletSpeed, direction, _staticData.Damage);
-            _gameFactory.CreateBullet(_staticData.Bullet, _parent, position, _spawnPoint.rotation,
-                bulletParams);
+            _gameFactory.CreateBullet(_staticData.Bullet, _spawnPoint, bulletParams);
             _cooldown = 0.0f;
         }
     }

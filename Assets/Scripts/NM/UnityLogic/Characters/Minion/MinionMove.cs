@@ -13,14 +13,11 @@ namespace NM.UnityLogic.Characters.Minion
         private string _id;
         private float _movementSpeed;
 
-        private void Start()
-        {
-            _camera = Camera.main.transform;
-        }
         public void Construct(string id, float movementSpeed)
         {
             _id = id;
             _movementSpeed = movementSpeed;
+            _camera = Camera.main.transform;
         }
         public void Move(Vector3 axis)
         {

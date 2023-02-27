@@ -335,6 +335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Agent: {fileID: 6920777591519676920}
   AttackZone: {fileID: 3755069279002989491}
+  _physicContactZone: {fileID: 0}
   _bulletSpawnPoint: {fileID: 6442183448580044109}
 --- !u!1001 &2946964460654066586
 PrefabInstance:

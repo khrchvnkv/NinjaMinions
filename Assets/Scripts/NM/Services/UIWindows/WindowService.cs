@@ -18,7 +18,7 @@ namespace NM.Services.UIWindows
         {
             GameHUD = hud.GetComponent<GameHUD>();
             GameHUD.Construct();
-            _coroutineRunner.MarkAsDontDestroyOnLoad(GameHUD);
+            _coroutineRunner.MarkAsDontDestroyOnLoad(GameHUD.gameObject);
             IsHudCreated = true;
         }
     }

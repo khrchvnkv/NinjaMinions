@@ -1,21 +1,25 @@
 ﻿using NM.Services.Factory;
+using NM.Services.Pool;
 using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Minion
 {
-    public class MinionContainer : MonoBehaviour, IClearable
+    public class MinionContainer : MonoBehaviour, IClearable, IPoolObject
     {
         [SerializeField] private MinionHp _minionHp;
         [SerializeField] private MinionMove _minionMove;
 
         public MinionHp MinionHp => _minionHp;
         public MinionMove MinionMove => _minionMove;
+
+        private GameFactory _gameFactory;
         
-        public void Construct(string id, int maxHp, float movementSpeed)
+        public void Construct(GameFactory gameFactory, string id, int maxHp, float movementSpeed)
         {
+            _gameFactory = gameFactory;
             _minionHp.Construct(id, maxHp);
             _minionMove.Construct(id, movementSpeed);
         }
-        public void Clear() => Destroy(gameObject);
+        public void Clear() => _gameFactory.AddToPool<MinionContainer>(gameObject);
     }
 }

@@ -1,11 +1,11 @@
-﻿using System;
-using NM.Services.Factory;
+﻿using NM.Services.Factory;
+using NM.Services.Pool;
 using NM.UnityLogic.Characters.Minion;
 using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Enemies
 {
-    public class BulletLogic : MonoBehaviour, IClearable
+    public class BulletLogic : MonoBehaviour, IClearable, IPoolObject
     {
         public struct BulletParams
         {
@@ -22,20 +22,22 @@ namespace NM.UnityLogic.Characters.Enemies
         }
 
         [SerializeField] private Transform _movingTransform;
-        
+
+        private GameFactory _gameFactory;
         private float _speed;
         private Vector3 _direction;
         private int _damage;
         
-        public void Construct(BulletParams bulletParams)
+        public void Construct(GameFactory gameFactory, BulletParams bulletParams)
         {
+            _gameFactory = gameFactory;
             _speed = bulletParams.Speed;
             _direction = bulletParams.Direction;
             _damage = bulletParams.Damage;
         }
         public void Clear()
         {
-            Destroy(gameObject);
+            _gameFactory.AddToPool<BulletLogic>(gameObject);
         }
         private void FixedUpdate()
         {

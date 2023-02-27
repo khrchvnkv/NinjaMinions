@@ -6,6 +6,6 @@ namespace NM
     public interface ICoroutineRunner
     {
         Coroutine StartCoroutine(IEnumerator coroutine);
-        void MarkAsDontDestroyOnLoad(MonoBehaviour monoBehaviour);
+        void MarkAsDontDestroyOnLoad(GameObject gameObject);
     }
 }

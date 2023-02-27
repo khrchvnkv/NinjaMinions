@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using NM.Services.AssetManagement;
-using NM.Services.GameLoop;
 using NM.Services.Input;
 using NM.Services.PersistentProgress;
+using NM.Services.Pool;
 using NM.Services.StaticData;
 using NM.Services.UIWindows;
 using NM.StaticData;
 using NM.UnityLogic.Characters.Enemies;
 using NM.UnityLogic.Characters.Enemies.Behaviour;
+using NM.UnityLogic.Characters.Enemies.Behaviour.Patrolman;
+using NM.UnityLogic.Characters.Enemies.Behaviour.Sniper;
+using NM.UnityLogic.Characters.Enemies.Behaviour.Stalker;
 using NM.UnityLogic.Characters.Enemies.SpawnLogic;
 using NM.UnityLogic.Characters.Minion;
 using NM.UnityLogic.Characters.Minion.SpawnLogic;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace NM.Services.Factory
 {
@@ -32,6 +34,7 @@ namespace NM.Services.Factory
         private readonly InputService _inputService;
         private readonly WindowService _windowService;
         private readonly PersistentProgressService _progressService;
+        private readonly PoolService _poolService;
 
         private MinionsMover _mover;
 
@@ -41,51 +44,67 @@ namespace NM.Services.Factory
 
         public event Action OnCleanedUp;
 
-        public GameFactory(AssetProvider assets, StaticDataService staticData, InputService inputService, 
-            WindowService windowService, PersistentProgressService progressService)
+        public GameFactory(AssetProvider assets, StaticDataService staticData, InputService inputService,
+            WindowService windowService, PersistentProgressService progressService, PoolService poolService)
         {
             _assets = assets;
             _staticData = staticData;
             _inputService = inputService;
             _windowService = windowService;
             _progressService = progressService;
+            _poolService = poolService;
+        }
+        public void CreatePool(ICoroutineRunner coroutineRunner) => _poolService.CreatePool(coroutineRunner);
+        public void AddToPool<T>(GameObject instance) where T : IPoolObject
+        {
+            _poolService.AddToPool<T>(instance);
         }
         public GameObject CreateMinionsMover()
         {
-            var mover = InstantiateRegistered(MinionsMover);
-            _mover = mover.GetComponent<MinionsMover>();
-            _mover.Construct(_inputService, _windowService, _progressService);
-            return mover;
+            var instance = _poolService.GetFromPool<MinionsMover>(() => Instantiate(MinionsMover));
+            RegisterProgressListener(instance);
+            _mover = instance.GetComponent<MinionsMover>();
+            _mover.Construct(_inputService, this, _windowService, _progressService);
+            return instance;
         }
         public GameObject CreateMinion(string minionId, Transform parent)
         {
-            var minion = InstantiateRegistered(CharactersMinion, parent);
+            var minion = _poolService.GetFromPool<MinionContainer>(() => 
+                Instantiate(CharactersMinion));
+            RegisterProgressListener(minion);
+            MoveTransform(minion, parent);
             var minionStaticData = _staticData.MinionStaticData;
             var minionContainer = minion.GetComponent<MinionContainer>();
             _mover.AddMinion(minionContainer);
-            minionContainer.Construct(minionId, minionStaticData.MaxHp, minionStaticData.MovementSpeed);
+            minionContainer.Construct(this, minionId, minionStaticData.MaxHp, minionStaticData.MovementSpeed);
             return minion;
         }
         public void CreateMinionSpawner(MinionSpawnerData spawnerData)
         {
-            var at = spawnerData.SpawnPosition;
-            var spawner = InstantiateRegistered(MinionSpawner, at);
+            var spawner = _poolService.GetFromPool<MinionSpawnPoint>(() => 
+                Instantiate(MinionSpawner));
+            RegisterProgressListener(spawner);
+            MoveTo(spawner, spawnerData.SpawnPosition);
             var minionSpawner = spawner.GetComponent<MinionSpawnPoint>();
             minionSpawner.Construct(this, spawnerData.Id);
         }
         public GameObject CreateEnemy(EnemySpawnerData spawnerData, Transform parent)
         {
             var enemyData = _staticData.GetEnemyData(spawnerData.EnemyTypeId);
-            var enemy = InstantiateRegistered(enemyData.Prefab, parent);
+            var enemy = _poolService.GetEnemyFromPool(enemyData, () => 
+                Instantiate(enemyData.Prefab, parent));
+            RegisterProgressListener(enemy);
+            MoveTransform(enemy, parent);
             var enemyConstruct = enemy.GetComponent<IEnemy>();
             enemyConstruct.Construct(this, spawnerData.Id, enemyData, spawnerData.Points);
             return enemy;
         }
         public void CreateEnemySpawner(EnemySpawnerData spawnerData)
         {
-            var atPosition = spawnerData.SpawnPosition;
-            var atRotation = Quaternion.Euler(spawnerData.SpawnRotation);
-            var spawner = InstantiateRegistered(EnemySpawner, atPosition, atRotation);
+            var spawner = _poolService.GetFromPool<EnemySpawnPoint>(() => 
+                    Instantiate(EnemySpawner));
+            RegisterProgressListener(spawner);
+            MoveTransform(spawner, spawnerData.SpawnPosition, spawnerData.SpawnRotation);
             var enemySpawner = spawner.GetComponent<EnemySpawnPoint>();
             enemySpawner.Construct(this, spawnerData);
         }
@@ -97,11 +116,12 @@ namespace NM.Services.Factory
             _windowService.RegisterHud(hud);
             return hud;
         }
-        public GameObject CreateBullet(GameObject prefab, Transform parent, Vector3 position,
-            Quaternion rotation, BulletLogic.BulletParams bulletParams)
+        public GameObject CreateBullet(GameObject prefab, Transform parent, BulletLogic.BulletParams bulletParams)
         {
-            var bullet = InstantiateRegistered(prefab, parent, position, rotation);
-            bullet.GetComponent<BulletLogic>().Construct(bulletParams);
+            var bullet = _poolService.GetFromPool<BulletLogic>(() => Instantiate(prefab, parent));
+            RegisterProgressListener(bullet);
+            MoveTransform(bullet, parent);
+            bullet.GetComponent<BulletLogic>().Construct(this, bulletParams);
             return bullet;
         }
         public void Cleanup()
@@ -115,42 +135,29 @@ namespace NM.Services.Factory
             _clearables.Clear();
             OnCleanedUp?.Invoke();
         }
-        private GameObject InstantiateRegistered(GameObject prefab, Transform parent)
-        {
-            var gameObject = _assets.Instantiate(prefab, parent);
-            RegisterProgressListener(gameObject);
-            return gameObject;
-        }
-        private GameObject InstantiateRegistered(GameObject prefab, Transform parent, Vector3 position, Quaternion rotation)
-        {
-            var gameObject = _assets.Instantiate(prefab, parent, position, rotation);
-            RegisterProgressListener(gameObject);
-            return gameObject;
-        }
         private GameObject InstantiateRegistered(string path)
         {
             var gameObject = _assets.Instantiate(path);
             RegisterProgressListener(gameObject);
             return gameObject;
         }
-        private GameObject InstantiateRegistered(string path, Transform parent)
+        private GameObject Instantiate(string path) => _assets.Instantiate(path);
+        private GameObject Instantiate(GameObject prefab, Transform parent) => _assets.Instantiate(prefab, parent);
+        private void MoveTransform(GameObject movingGameObject, Transform to)
         {
-            var gameObject = InstantiateRegistered(path, parent.position);
-            gameObject.transform.SetParent(parent);
-            return gameObject;
+            var movingTransform = movingGameObject.transform;
+            movingTransform.position = to.position;
+            movingTransform.rotation = to.rotation;
         }
-        private GameObject InstantiateRegistered(string path, Vector3 at)
+        private void MoveTransform(GameObject movingGameObject, Vector3 toPosition, Vector3 toRotation)
         {
-            var gameObject = _assets.Instantiate(path, at);
-            RegisterProgressListener(gameObject);
-            return gameObject;
+            var rotationQuaternion = Quaternion.Euler(toRotation);
+            var movingTransform = movingGameObject.transform;
+            movingTransform.position = toPosition;
+            movingTransform.rotation = rotationQuaternion;
         }
-        private GameObject InstantiateRegistered(string path, Vector3 at, Quaternion rotation)
-        {
-            var gameObject = _assets.Instantiate(path, at, rotation);
-            RegisterProgressListener(gameObject);
-            return gameObject;
-        }
+        private void MoveTo(GameObject movingGameObject, Vector3 position) =>
+            movingGameObject.transform.position = position;
         private void RegisterProgressListener(GameObject gameObject)
         {
             if (gameObject.TryGetComponent(out IClearable clearable))

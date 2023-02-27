@@ -128,37 +128,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3251347464228287302, guid: 125480de48937ad48b7499f634e03105, type: 3}
   m_PrefabInstance: {fileID: 3251347464213494956}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &152375206
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 152375207}
-  m_Layer: 0
-  m_Name: Point_2
-  m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &152375207
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 152375206}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.08, y: 0, z: 8.01}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 607956334}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &193401355 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 393935454448058499, guid: 5de85b4b5cbfc52448c4b4a7b8eeb2e3, type: 3}
@@ -369,20 +338,24 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 831516436565617820, guid: 125480de48937ad48b7499f634e03105, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.94
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 831516436565617820, guid: 125480de48937ad48b7499f634e03105, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.21
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3251347464228287296, guid: 125480de48937ad48b7499f634e03105, type: 3}
+      propertyPath: EnemyTypeId
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3251347464228287296, guid: 125480de48937ad48b7499f634e03105, type: 3}
       propertyPath: Points.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3251347464228287296, guid: 125480de48937ad48b7499f634e03105, type: 3}
       propertyPath: Points.Array.data[1]
       value: 
-      objectReference: {fileID: 152375207}
+      objectReference: {fileID: 0}
     - target: {fileID: 3251347464228287301, guid: 125480de48937ad48b7499f634e03105, type: 3}
       propertyPath: m_Name
       value: EnemySpawnMarker_2

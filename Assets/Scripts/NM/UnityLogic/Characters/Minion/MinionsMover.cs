@@ -4,28 +4,33 @@ using NM.Services.Factory;
 using NM.Services.GameLoop;
 using NM.Services.Input;
 using NM.Services.PersistentProgress;
+using NM.Services.Pool;
 using NM.Services.UIWindows;
 using NM.UnityLogic.UI;
 using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Minion
 {
-    public class MinionsMover : MonoBehaviour, IClearable
+    public class MinionsMover : MonoBehaviour, IClearable, IPoolObject
     {
         private List<MinionContainer> _minions = new List<MinionContainer>();
 
         private GameLoopService _gameLoopService;
         private InputService _inputService;
+        private GameFactory _gameFactory;
         private WindowService _windowService;
         private PersistentProgressService _progressService;
 
         private CameraFollow _cameraFollow;
         private int _currentMinionIndex;
 
-        public void Construct(InputService inputService, WindowService windowService, PersistentProgressService progressService)
+        public void Construct(InputService inputService, GameFactory gameFactory, 
+            WindowService windowService, PersistentProgressService progressService)
         {
+            _currentMinionIndex = 0;
             _gameLoopService = AllServices.Container.Single<GameLoopService>();
             _inputService = inputService;
+            _gameFactory = gameFactory;
             _windowService = windowService;
             _progressService = progressService;
             _cameraFollow = Camera.main.GetComponent<CameraFollow>();
@@ -35,7 +40,8 @@ namespace NM.UnityLogic.Characters.Minion
         public void Clear()
         {
             _inputService.OnInputActivated -= StartLogic;
-            Destroy(gameObject);
+            _minions.Clear();
+            _gameFactory.AddToPool<MinionsMover>(gameObject);
         }
         private void Update()
         {

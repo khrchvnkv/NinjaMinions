@@ -23,6 +23,11 @@ namespace NM.Services.AssetManagement
         {
             return Object.Instantiate(prefab, parent);
         }
+        public GameObject Instantiate(GameObject prefab, Vector3 position, Quaternion rotation)
+        {
+            var instance = Object.Instantiate(prefab, position, rotation);
+            return instance;
+        }
         public GameObject Instantiate(GameObject prefab, Transform parent, Vector3 position, Quaternion rotation)
         {
             var instance = Object.Instantiate(prefab, position, rotation);

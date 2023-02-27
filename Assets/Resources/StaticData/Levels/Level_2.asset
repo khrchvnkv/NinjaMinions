@@ -17,6 +17,12 @@ MonoBehaviour:
   - Id: Level_2_5c9c0b23-eb60-4c66-9e04-a8a87e3b4cdf
     SpawnPosition: {x: 7.83, y: 0, z: -3.58}
   EnemySpawners:
+  - Id: Level_2_79b52228-54c3-443f-8bf1-24508219da61
+    EnemyTypeId: 2
+    SpawnPosition: {x: 6.95, y: 0, z: 4.13}
+    SpawnRotation: {x: -0, y: 199.55434, z: 0}
+    Points:
+    - {x: 6.95, y: 0, z: 4.13}
   - Id: Level_2_cf0a3890-0234-4e63-9407-7ef56a65dbd4
     EnemyTypeId: 1
     SpawnPosition: {x: -0.82, y: 0, z: 2.41}

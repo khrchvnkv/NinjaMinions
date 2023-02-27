@@ -1,7 +1,6 @@
 ﻿using NM.Data;
 using NM.LoadingView;
 using NM.Services.Factory;
-using NM.Services.PersistentProgress;
 using NM.Services.StaticData;
 using UnityEngine.SceneManagement;
 
@@ -9,22 +8,21 @@ namespace NM.States
 {
     public class LoadLevelState : IPayloadedState
     {
+        private readonly ICoroutineRunner _coroutineRunner;
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly LoadingCurtain _loadingCurtain;
         private readonly GameFactory _gameFactory;
-        private readonly PersistentProgressService _progressService;
         private readonly StaticDataService _staticDataService;
 
-        public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, 
-            LoadingCurtain loadingCurtain, GameFactory gameFactory, 
-            PersistentProgressService progressService, StaticDataService staticDataService)
+        public LoadLevelState(ICoroutineRunner coroutineRunner, GameStateMachine gameStateMachine, SceneLoader sceneLoader, 
+            LoadingCurtain loadingCurtain, GameFactory gameFactory, StaticDataService staticDataService)
         {
+            _coroutineRunner = coroutineRunner;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
             _loadingCurtain = loadingCurtain;
             _gameFactory = gameFactory;
-            _progressService = progressService;
             _staticDataService = staticDataService;
         }
         public void Enter(SaveSlotData slot)
@@ -35,10 +33,15 @@ namespace NM.States
         }
         private void OnLoaded(SaveSlotData slot)
         {
+            InitPool();
             InitHud();
             InitSpawners();
             InformProgressReaders(slot);
             _gameStateMachine.Enter<GameLoopState>();
+        }
+        private void InitPool()
+        {
+            _gameFactory.CreatePool(_coroutineRunner);
         }
         private void InitHud()
         {
@@ -46,7 +49,6 @@ namespace NM.States
         }
         private void InitSpawners()
         {
-            // Create Minion Mover
             _gameFactory.CreateMinionsMover();
             string sceneKey = SceneManager.GetActiveScene().name;
             var levelStaticData = _staticDataService.GetLevelData(sceneKey);
