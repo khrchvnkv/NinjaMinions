@@ -71,5 +71,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021fc7bf2d104ba7a773abbd5ddea7ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _collider: {fileID: 131590445024783783}
+  _colliderParent: {fileID: 7894413866605727284}
   _minionTriggerObserver: {fileID: 8872896676989350451}

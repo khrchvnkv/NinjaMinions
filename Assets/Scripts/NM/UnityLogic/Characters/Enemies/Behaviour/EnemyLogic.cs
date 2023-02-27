@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NM.Data;
 using NM.Services.Factory;
 using NM.Services.PersistentProgress;
@@ -11,28 +10,27 @@ using UnityEngine.AI;
 namespace NM.UnityLogic.Characters.Enemies.Behaviour
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public abstract class EnemyLogic<T> : MonoBehaviour, IEnemy, IClearable, ISavedProgressWriter where T : IEnemyBehaviour
+    public abstract class EnemyLogic<TBehaviour, TData> : MonoBehaviour, IEnemy, IClearable, ISavedProgressWriter 
+        where TBehaviour : IEnemyBehaviour
+        where TData : EnemyStaticData
     {
         [SerializeField] protected NavMeshAgent Agent;
-        [SerializeField] protected AggroZone AggroZone;
-        
+        [SerializeField] protected AggroZone AttackZone;
+
         private string _id;
-        private EnemyStaticData _enemyData;
+        private IEnemyBehaviour _currentBehaviour;
+        private bool _isDied;
 
-        protected IEnemyBehaviour CurrentBehaviour;
-        protected T IdleBehaviour;
-        protected List<Vector3> PatrolPoints;
-        protected bool IsDied;
+        protected TBehaviour IdleBehaviour;
+        protected TData StaticData;
 
-        protected int Damage => _enemyData.Damage;
-
-        public virtual void Construct(string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
+        public virtual void Construct(GameFactory gameFactory, string id, 
+            EnemyStaticData enemyData, List<Vector3> patrolPoints)
         {
             _id = id;
-            _enemyData = enemyData;
-            PatrolPoints = new List<Vector3>(patrolPoints);
-            Agent.speed = _enemyData.Speed;
-            AggroZone.SetZoneRadius(enemyData.AttackDistance);
+            StaticData = (TData)enemyData;
+            Agent.speed = StaticData.Speed;
+            AttackZone.SetZoneScale(enemyData.AttackDistance);
         }
         public void LoadProgress(SaveSlotData slotData)
         {
@@ -40,10 +38,10 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
             {
                 if (enemyData.Id == _id)
                 {
-                    Agent.transform.position = enemyData.Position.AsUnityVector();
+                    Agent.Warp(enemyData.Position.AsUnityVector());
                     var isAlive = !enemyData.IsDied;
                     Agent.gameObject.SetActive(isAlive);
-                    IsDied = !isAlive;
+                    _isDied = !isAlive;
                     return;
                 }
             }
@@ -56,31 +54,33 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
                 if (enemyData.Id == _id)
                 {
                     enemyData.Position = position;
-                    enemyData.IsDied = IsDied;
+                    enemyData.IsDied = _isDied;
                     return;
                 }
             }
-            slotData.EnemiesData.Add(new EnemyData(_id, position, IsDied));
+            slotData.EnemiesData.Add(new EnemyData(_id, position, _isDied));
         }
         public void Clear() => Destroy(gameObject);
         protected void EnterBehaviour(IEnemyBehaviour behaviour)
         {
-            CurrentBehaviour?.Exit();
-            CurrentBehaviour = behaviour;
-            CurrentBehaviour.Enter();
+            _currentBehaviour?.Exit();
+            _currentBehaviour = behaviour;
+            _currentBehaviour.Enter();
         }
-        protected abstract void OnAggroZoneEntered(MinionContainer minion);
-        private void OnEnable()
+        protected void AttackAction(MinionContainer minion)
         {
-            AggroZone.OnAggroZoneEntered += OnAggroZoneEntered;
+            minion.MinionHp.TakeDamage(StaticData.Damage);
+            gameObject.SetActive(false);
+            _isDied = true;
         }
-        private void OnDisable()
+        protected virtual void OnEnable() { }
+        protected virtual void OnDisable()
         {
-            AggroZone.OnAggroZoneEntered -= OnAggroZoneEntered;
+            _currentBehaviour?.Exit();
         }
         private void Update()
         {
-            CurrentBehaviour?.UpdateBehaviour();
+            _currentBehaviour?.UpdateBehaviour();
         }
     }
 }

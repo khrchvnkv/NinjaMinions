@@ -19,9 +19,17 @@ MonoBehaviour:
   - Id: Level_1_08995a92-b639-4382-8d9d-cf8b6ca39f5f
     SpawnPosition: {x: -6.73, y: 0, z: 3.01}
   EnemySpawners:
+  - Id: Level_1_4d01a71a-4402-404f-aa63-016e124bcd20
+    EnemyTypeId: 0
+    SpawnPosition: {x: -2.94, y: 0, z: -2.6}
+    SpawnRotation: {x: -0, y: 52.27069, z: -0}
+    Points:
+    - {x: -3.681307, y: 0, z: -1.9850495}
+    - {x: 4.056081, y: 0, z: 1.4473896}
   - Id: Level_1_8a7db992-bdb6-4049-bb29-c8775766466b
     EnemyTypeId: 0
     SpawnPosition: {x: 2.39, y: 0, z: 2.66}
+    SpawnRotation: {x: -0, y: 354.73343, z: 0}
     Points:
-    - {x: -0.78, y: 0, z: 3.77}
-    - {x: 1.3000001, y: 0, z: -3.3099997}
+    - {x: -0.8685038, y: 0, z: 3.4743416}
+    - {x: 1.8525844, y: 0, z: -3.3848474}

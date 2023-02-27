@@ -27,7 +27,7 @@ namespace NM.UnityLogic.Editor
                     .ToList();
                 levelData.EnemySpawners = FindObjectsOfType<EnemySpawnMarker>()
                     .Select(x => new EnemySpawnerData(x.GetComponent<UniqueId>().Id,
-                        x.EnemyTypeId, x.transform.position, x.Points))
+                        x.EnemyTypeId, x.transform.position, x.transform.rotation, x.Points))
                     .ToList();
 
                 levelData.LevelKey = SceneManager.GetActiveScene().name;

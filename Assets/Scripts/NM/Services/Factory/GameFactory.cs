@@ -78,13 +78,14 @@ namespace NM.Services.Factory
             var enemyData = _staticData.GetEnemyData(spawnerData.EnemyTypeId);
             var enemy = InstantiateRegistered(enemyData.Prefab, parent);
             var enemyConstruct = enemy.GetComponent<IEnemy>();
-            enemyConstruct.Construct(spawnerData.Id, enemyData, spawnerData.Points);
+            enemyConstruct.Construct(this, spawnerData.Id, enemyData, spawnerData.Points);
             return enemy;
         }
         public void CreateEnemySpawner(EnemySpawnerData spawnerData)
         {
-            var at = spawnerData.SpawnPosition;
-            var spawner = InstantiateRegistered(EnemySpawner, at);
+            var atPosition = spawnerData.SpawnPosition;
+            var atRotation = Quaternion.Euler(spawnerData.SpawnRotation);
+            var spawner = InstantiateRegistered(EnemySpawner, atPosition, atRotation);
             var enemySpawner = spawner.GetComponent<EnemySpawnPoint>();
             enemySpawner.Construct(this, spawnerData);
         }
@@ -95,6 +96,13 @@ namespace NM.Services.Factory
             var hud = InstantiateRegistered(HUD);
             _windowService.RegisterHud(hud);
             return hud;
+        }
+        public GameObject CreateBullet(GameObject prefab, Transform parent, Vector3 position,
+            Quaternion rotation, BulletLogic.BulletParams bulletParams)
+        {
+            var bullet = InstantiateRegistered(prefab, parent, position, rotation);
+            bullet.GetComponent<BulletLogic>().Construct(bulletParams);
+            return bullet;
         }
         public void Cleanup()
         {
@@ -109,7 +117,13 @@ namespace NM.Services.Factory
         }
         private GameObject InstantiateRegistered(GameObject prefab, Transform parent)
         {
-            var gameObject = Object.Instantiate(prefab, parent);
+            var gameObject = _assets.Instantiate(prefab, parent);
+            RegisterProgressListener(gameObject);
+            return gameObject;
+        }
+        private GameObject InstantiateRegistered(GameObject prefab, Transform parent, Vector3 position, Quaternion rotation)
+        {
+            var gameObject = _assets.Instantiate(prefab, parent, position, rotation);
             RegisterProgressListener(gameObject);
             return gameObject;
         }
@@ -121,14 +135,19 @@ namespace NM.Services.Factory
         }
         private GameObject InstantiateRegistered(string path, Transform parent)
         {
-            var gameObject = _assets.Instantiate(path, parent.position);
+            var gameObject = InstantiateRegistered(path, parent.position);
             gameObject.transform.SetParent(parent);
-            RegisterProgressListener(gameObject);
             return gameObject;
         }
         private GameObject InstantiateRegistered(string path, Vector3 at)
         {
             var gameObject = _assets.Instantiate(path, at);
+            RegisterProgressListener(gameObject);
+            return gameObject;
+        }
+        private GameObject InstantiateRegistered(string path, Vector3 at, Quaternion rotation)
+        {
+            var gameObject = _assets.Instantiate(path, at, rotation);
             RegisterProgressListener(gameObject);
             return gameObject;
         }

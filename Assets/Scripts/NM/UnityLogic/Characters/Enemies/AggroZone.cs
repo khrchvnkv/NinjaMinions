@@ -5,24 +5,26 @@ using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Enemies
 {
-    [RequireComponent(typeof(SphereCollider))]
-    [RequireComponent(typeof(MinionTriggerObserver))]
     public class AggroZone : MonoBehaviour
     {
-        [SerializeField] private SphereCollider _collider;
+        [SerializeField] private Transform _colliderParent;
         [SerializeField] private MinionTriggerObserver _minionTriggerObserver;
 
         public event Action<MinionContainer> OnAggroZoneEntered;
+        public event Action<MinionContainer> OnAggroZoneExited;
 
-        public void SetZoneRadius(float radius) => _collider.radius = radius;
+        public void SetZoneScale(float scaleMultiplier) => _colliderParent.localScale = Vector3.one * scaleMultiplier;
         private void OnEnable()
         {
             _minionTriggerObserver.OnMinionEntered += AggroAction;
+            _minionTriggerObserver.OnMinionExited += StopAggroAction;
         }
         private void OnDisable()
         {
             _minionTriggerObserver.OnMinionEntered -= AggroAction;
+            _minionTriggerObserver.OnMinionExited -= StopAggroAction;
         }
         private void AggroAction(MinionContainer minion) => OnAggroZoneEntered?.Invoke(minion);
+        private void StopAggroAction(MinionContainer minion) => OnAggroZoneExited?.Invoke(minion);
     }
 }

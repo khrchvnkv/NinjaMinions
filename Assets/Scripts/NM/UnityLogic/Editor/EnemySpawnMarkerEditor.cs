@@ -1,5 +1,4 @@
-﻿using NM.UnityLogic.Characters.Enemies;
-using NM.UnityLogic.Characters.Enemies.SpawnLogic;
+﻿using NM.UnityLogic.Characters.Enemies.SpawnLogic;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +11,10 @@ namespace NM.UnityLogic.Editor
         public static void RenderCustomGizmo(EnemySpawnMarker spawner, GizmoType gizmo)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawSphere(spawner.transform.position, 0.5f);
+            var transform = spawner.transform;
+            var position = transform.position;
+            Gizmos.DrawSphere(position, 0.5f);
+            Gizmos.DrawLine(position, position + transform.forward * 2.5f);
         }
     }
 }
