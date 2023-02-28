@@ -23,7 +23,7 @@ MonoBehaviour:
     SpawnRotation: {x: -0, y: 199.55434, z: 0}
     Points:
     - {x: -7.36, y: 0, z: -3.66}
-    - {x: -7.36, y: 0, z: -3.66}
+    - {x: -0.9767189, y: 0, z: -2.6587403}
   - Id: Level_3_449fa5a9-cc47-4e8b-93ac-0589cd8e046c
     EnemyTypeId: 2
     SpawnPosition: {x: -0.82, y: 0, z: 2.41}

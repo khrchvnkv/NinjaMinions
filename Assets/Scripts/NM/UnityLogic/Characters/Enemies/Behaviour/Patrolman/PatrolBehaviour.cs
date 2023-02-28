@@ -12,13 +12,19 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Patrolman
         private readonly Transform _transform;
         private readonly List<Vector3> _patrolPoints;
 
-        private int _currentPointIndex;
+        public int CurrentPointIndex { get; private set; }
         
         public PatrolBehaviour(NavMeshAgent agent, Transform transform, List<Vector3> points)
         {
             _agent = agent;
             _transform = transform;
             _patrolPoints = new List<Vector3>(points);
+        }
+        public void SetPointIndex(int index)
+        {
+            if (index < 0 || index >= _patrolPoints.Count) return;
+            CurrentPointIndex = index;
+            MoveToCurrentPoint();
         }
         public void Enter()
         {
@@ -39,19 +45,19 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Patrolman
         {
             if (_patrolPoints.Count <= 1) return false;
 
-            var target = _patrolPoints[_currentPointIndex];
+            var target = _patrolPoints[CurrentPointIndex];
             return Vector3.Distance(_transform.position, target) <= StopDistance;
         }
         private void SetNewTarget()
         {
-            _currentPointIndex++;
-            if (_currentPointIndex >= _patrolPoints.Count) _currentPointIndex = 0;
+            CurrentPointIndex++;
+            if (CurrentPointIndex >= _patrolPoints.Count) CurrentPointIndex = 0;
             MoveToCurrentPoint();
         }
         private void MoveToCurrentPoint()
         {
             if (_patrolPoints.Count == 0) return;
-            _agent.SetDestination(_patrolPoints[_currentPointIndex]);
+            _agent.SetDestination(_patrolPoints[CurrentPointIndex]);
         }
     }
 }

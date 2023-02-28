@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NM.Services.Factory;
 using NM.StaticData;
+using NM.UnityLogic.Characters.Enemies.StateRecovering;
 using NM.UnityLogic.Characters.Minion;
 using UnityEngine;
 
@@ -10,14 +11,17 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Stalker
     {
         [SerializeField] private AggroZone _aggroZone;
 
+        private AggroStateRecovery _stateRecovery;
         private StalkerBehaviour _stalkerBehaviour;
+        private bool _isAggro;
         
         public override void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
         {
             base.Construct(gameFactory, id, enemyData, patrolPoints);
             _aggroZone.SetZoneScale(StaticData.AggroDistance);
             IdleBehaviour = new EmptyBehaviour();
-            EnterBehaviour(IdleBehaviour);
+            _isAggro = false;
+            if (_stateRecovery == null) _stateRecovery = new AggroStateRecovery(EnterBehaviour);
         }
         public override void Clear()
         {
@@ -48,8 +52,12 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Stalker
         }
         private void StartStalkerBehaviour(MinionContainer minion)
         {
-            _stalkerBehaviour = new StalkerBehaviour(Agent, minion.transform);
+            _isAggro = true;
+            _stalkerBehaviour = new StalkerBehaviour(Agent, minion);
             EnterBehaviour(_stalkerBehaviour);
         }
+        protected override string GenerateStateMeta() => _stateRecovery.GenerateStateMeta(_isAggro, _stalkerBehaviour);
+        protected override void RestoreBehaviourState(string stateMeta) => 
+            _stateRecovery.RestoreBehaviourState(stateMeta, IdleBehaviour, StartStalkerBehaviour, GameFactory);
     }
 }

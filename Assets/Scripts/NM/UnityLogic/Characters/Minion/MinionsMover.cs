@@ -36,6 +36,14 @@ namespace NM.UnityLogic.Characters.Minion
             _cameraFollow = Camera.main.GetComponent<CameraFollow>();
             _inputService.OnInputActivated += StartLogic;
         }
+        public MinionContainer GetMinionWithId(string id)
+        {
+            foreach (var minion in _minions)
+            {
+                if (minion.Id == id) return minion;
+            }
+            return null;
+        }
         public void AddMinion(MinionContainer minion) => _minions.Add(minion);
         public void Clear()
         {

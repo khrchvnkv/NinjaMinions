@@ -39,12 +39,10 @@ namespace NM.Services.Pool
             {
                 var instance = operation();
                 instance.transform.SetParent(_pool.Parent);
-                instance.SetActive(true);
                 _pool.RegisterPool<T>(instance);
                 return instance;
             }
             var itemFromPool = _pool.GetFromPool<T>();
-            itemFromPool.gameObject.SetActive(true);
             return itemFromPool;
         }
         public GameObject GetEnemyFromPool(EnemyStaticData staticData, CreateInstanceOperation createOperation)

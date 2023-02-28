@@ -59,12 +59,14 @@ namespace NM.Services.Factory
         {
             _poolService.AddToPool<T>(instance);
         }
+        public MinionContainer GetMinionWithId(string minionId) => _mover.GetMinionWithId(minionId);
         public GameObject CreateMinionsMover()
         {
             var instance = _poolService.GetFromPool<MinionsMover>(() => Instantiate(MinionsMover));
             RegisterProgressListener(instance);
             _mover = instance.GetComponent<MinionsMover>();
             _mover.Construct(_inputService, this, _windowService, _progressService);
+            instance.SetActive(true);
             return instance;
         }
         public GameObject CreateMinion(string minionId, Transform parent)
@@ -148,6 +150,7 @@ namespace NM.Services.Factory
             var movingTransform = movingGameObject.transform;
             movingTransform.position = to.position;
             movingTransform.rotation = to.rotation;
+            movingGameObject.SetActive(true);
         }
         private void MoveTransform(GameObject movingGameObject, Vector3 toPosition, Vector3 toRotation)
         {
@@ -155,9 +158,13 @@ namespace NM.Services.Factory
             var movingTransform = movingGameObject.transform;
             movingTransform.position = toPosition;
             movingTransform.rotation = rotationQuaternion;
+            movingGameObject.SetActive(true);
         }
-        private void MoveTo(GameObject movingGameObject, Vector3 position) =>
+        private void MoveTo(GameObject movingGameObject, Vector3 position)
+        {
             movingGameObject.transform.position = position;
+            movingGameObject.SetActive(true);
+        }
         private void RegisterProgressListener(GameObject gameObject)
         {
             if (gameObject.TryGetComponent(out IClearable clearable))

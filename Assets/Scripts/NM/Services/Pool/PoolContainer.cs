@@ -29,7 +29,10 @@ namespace NM.Services.Pool
         {
             if (_poolCollections.TryGetValue(typeof(T), out var pool))
             {
-                pool.Add(instance);
+                if (!pool.Contains(instance))
+                {
+                    pool.Add(instance);
+                }
             }
             else
             {

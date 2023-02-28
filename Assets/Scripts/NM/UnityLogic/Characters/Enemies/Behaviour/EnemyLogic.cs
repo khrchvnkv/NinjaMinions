@@ -44,30 +44,38 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
                 {
                     WarpTo(enemyData.Position.AsUnityVector(), enemyData.Rotation.AsUnityVector());
                     var isAlive = !enemyData.IsDied;
-                    Agent.gameObject.SetActive(isAlive);
                     _isDied = !isAlive;
-                    ActivateTriggers();
+                    if (isAlive)
+                    {
+                        RestoreBehaviourState(enemyData.StateMeta);
+                    }
+                    else
+                    {
+                        Clear();
+                    }
                     return;
                 }
             }
-            ActivateTriggers();
+            RestoreBehaviourState(string.Empty);
         }
         public void SaveProgress(SaveSlotData slotData)
         {
             var agentTransform = Agent.transform;
             var position = agentTransform.position.AsVector3Data();
             var rotation = agentTransform.rotation.eulerAngles.AsVector3Data();
+            var stateMeta = GenerateStateMeta();
             foreach (var enemyData in slotData.EnemiesData)
             {
                 if (enemyData.Id == _id)
                 {
                     enemyData.Position = position;
                     enemyData.Rotation = rotation;
+                    enemyData.StateMeta = stateMeta;
                     enemyData.IsDied = _isDied;
                     return;
                 }
             }
-            slotData.EnemiesData.Add(new EnemyData(_id, position, rotation, _isDied));
+            slotData.EnemiesData.Add(new EnemyData(_id, position, rotation, stateMeta, _isDied));
         }
         public virtual void Clear()
         {
@@ -89,15 +97,14 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
         }
         protected void AttackAction(MinionContainer minion)
         {
-            minion.MinionHp.TakeDamage(StaticData.Damage);
             _isDied = true;
             Clear();
+            minion.MinionHp.TakeDamage(StaticData.Damage);
         }
-        protected virtual void OnEnable() { }
-        protected virtual void OnDisable()
-        {
-            _currentBehaviour?.Exit();
-        }
+        protected virtual void OnEnable() => ActivateTriggers();
+        protected virtual void OnDisable() => _currentBehaviour?.Exit();
+        protected abstract string GenerateStateMeta();
+        protected abstract void RestoreBehaviourState(string stateMeta);
         private void WarpTo(Vector3 position, Vector3 rotation)
         {
             var agentTransform = Agent.transform;

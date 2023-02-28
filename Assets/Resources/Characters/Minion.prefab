@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minionHp: {fileID: 8740272193411468459}
   _minionMove: {fileID: 2706664296352138434}
+  _rigidbody: {fileID: 556706350214834550}
 --- !u!114 &8740272193411468459
 MonoBehaviour:
   m_ObjectHideFlags: 0

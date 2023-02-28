@@ -9,6 +9,7 @@ namespace NM.UnityLogic.Characters.Minion
         [SerializeField] private MinionHp _minionHp;
         [SerializeField] private MinionMove _minionMove;
 
+        public string Id { get; private set; }
         public MinionHp MinionHp => _minionHp;
         public MinionMove MinionMove => _minionMove;
 
@@ -16,6 +17,7 @@ namespace NM.UnityLogic.Characters.Minion
         
         public void Construct(GameFactory gameFactory, string id, int maxHp, float movementSpeed)
         {
+            Id = id;
             _gameFactory = gameFactory;
             _minionHp.Construct(id, maxHp);
             _minionMove.Construct(id, movementSpeed);

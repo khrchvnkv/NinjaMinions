@@ -19,6 +19,7 @@ namespace NM.Services.Pool
             _prefab = prefab;
             _parent = parent;
         }
+        public bool Contains(GameObject instance) => _collection.Contains(instance);
         public void Add(GameObject instance)
         {
             instance.SetActive(false);

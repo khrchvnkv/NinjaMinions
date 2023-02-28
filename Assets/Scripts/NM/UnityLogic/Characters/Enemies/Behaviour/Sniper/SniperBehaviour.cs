@@ -1,27 +1,30 @@
 ﻿using NM.Services.Factory;
 using NM.StaticData;
+using NM.UnityLogic.Characters.Minion;
 using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Enemies.Behaviour.Sniper
 {
-    internal class SniperBehaviour : IEnemyBehaviour
+    internal class SniperBehaviour : IAggroBehaviour
     {
         private readonly GameFactory _gameFactory;
         private readonly SniperStaticData _staticData;
+        private readonly MinionContainer _minion;
+        private readonly Transform _spawnPoint;
+        private readonly Transform _target;
 
-        private Transform _spawnPoint;
-        private Transform _target;
         private float _cooldown;
 
-        public SniperBehaviour(GameFactory gameFactory, SniperStaticData staticData, Transform spawnPoint)
+        public string MinionId => _minion.Id;
+        
+        public SniperBehaviour(GameFactory gameFactory, SniperStaticData staticData, 
+            Transform spawnPoint, MinionContainer minion)
         {
             _gameFactory = gameFactory;
             _staticData = staticData;
             _spawnPoint = spawnPoint;
-        }
-        public void SetTarget(Transform target)
-        {
-            _target = target;
+            _minion = minion;
+            _target = minion.transform;
         }
         public void Enter()
         {
