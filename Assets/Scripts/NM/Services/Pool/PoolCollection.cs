@@ -31,7 +31,6 @@ namespace NM.Services.Pool
             {
                 var instance = _collection[0];
                 _collection.RemoveAt(0);
-                instance.SetActive(true);
                 return instance;
             }
 

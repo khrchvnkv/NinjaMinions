@@ -16,10 +16,7 @@ namespace NM.UnityLogic.LevelExit
         {
             if (other.TryGetComponent(out MinionContainer minion))
             {
-                if (IsCorrectTriggerAction(other))
-                {
-                    OnMinionEntered?.Invoke(minion);
-                }
+                OnMinionEntered?.Invoke(minion);
             }
         }
         private void OnTriggerExit(Collider other)
@@ -28,14 +25,6 @@ namespace NM.UnityLogic.LevelExit
             {
                 OnMinionExited?.Invoke(minion);
             }
-        }
-        private bool IsCorrectTriggerAction(Collider other)
-        {
-            var colliderTransform = _collider.transform;
-            var minionTransform = other.transform;
-            return Physics.ComputePenetration(_collider, colliderTransform.position,
-                colliderTransform.rotation, other, minionTransform.position,
-                minionTransform.rotation, out var _, out var __);
         }
     }
 }
