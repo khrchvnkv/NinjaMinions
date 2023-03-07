@@ -2,7 +2,7 @@
 
 namespace NM.Services.PersistentProgress
 {
-    public interface ISavedProgressWriter : ISavedProgressReader
+    public interface ISavedProgressWriter
     {
         void SaveProgress(SaveSlotData slotData);
     }

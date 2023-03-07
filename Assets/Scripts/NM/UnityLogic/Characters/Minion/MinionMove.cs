@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Minion
 {
-    public class MinionMove : MonoBehaviour, ISavedProgressWriter
+    public class MinionMove : MonoBehaviour, ISavedProgressReaderWriter
     {
         [SerializeField] private CharacterController _characterController;
 

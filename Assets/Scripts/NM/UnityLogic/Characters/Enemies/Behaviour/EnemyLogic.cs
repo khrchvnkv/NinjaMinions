@@ -11,7 +11,7 @@ using UnityEngine.AI;
 namespace NM.UnityLogic.Characters.Enemies.Behaviour
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public abstract class EnemyLogic<TBehaviour, TData> : MonoBehaviour, IEnemy, IClearable, ISavedProgressWriter, IPoolObject 
+    public abstract class EnemyLogic<TBehaviour, TData> : MonoBehaviour, IEnemy, IClearable, ISavedProgressReaderWriter, IPoolObject 
         where TBehaviour : IEnemyBehaviour
         where TData : EnemyStaticData
     {

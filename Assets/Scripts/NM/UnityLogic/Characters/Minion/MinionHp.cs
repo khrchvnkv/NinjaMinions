@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Minion
 {
-    public class MinionHp : MonoBehaviour, ISavedProgressWriter, IHealthCharacter
+    public class MinionHp : MonoBehaviour, ISavedProgressReaderWriter, IHealthCharacter
     {
         public int HP { get; private set; }
         public int MaxHp { get; private set; }

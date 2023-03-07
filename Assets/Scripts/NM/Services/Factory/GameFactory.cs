@@ -167,19 +167,29 @@ namespace NM.Services.Factory
         }
         private void RegisterProgressListener(GameObject gameObject)
         {
-            if (gameObject.TryGetComponent(out IClearable clearable))
+            RegisterClearable();
+            RegisterProgressReaders();
+            RegisterProgressWriters();
+
+            void RegisterClearable()
             {
-                _clearables.Add(clearable);
+                if (gameObject.TryGetComponent(out IClearable clearable))
+                {
+                    _clearables.Add(clearable);
+                }
             }
-            foreach (var reader in gameObject.GetComponentsInChildren<ISavedProgressReader>())
+            void RegisterProgressReaders()
             {
-                Register(reader);
+                var readers = gameObject.GetComponentsInChildren<ISavedProgressReader>();
+                foreach (var reader in readers)
+                {
+                    ProgressReaders.Add(reader);
+                }
             }
-            
-            void Register(ISavedProgressReader reader)
+            void RegisterProgressWriters()
             {
-                ProgressReaders.Add(reader);
-                if (reader is ISavedProgressWriter writer)
+                var writers = gameObject.GetComponentsInChildren<ISavedProgressReaderWriter>();
+                foreach (var writer in writers)
                 {
                     ProgressWriters.Add(writer);
                 }
