@@ -8,17 +8,17 @@ namespace NM.States
 {
     public class LoadLevelState : IPayloadedState
     {
-        private readonly ICoroutineRunner _coroutineRunner;
+        private readonly IDontDestroyCreator _dontDestroyCreator;
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly LoadingCurtain _loadingCurtain;
         private readonly GameFactory _gameFactory;
         private readonly StaticDataService _staticDataService;
 
-        public LoadLevelState(ICoroutineRunner coroutineRunner, GameStateMachine gameStateMachine, SceneLoader sceneLoader, 
+        public LoadLevelState(IDontDestroyCreator dontDestroyCreator, GameStateMachine gameStateMachine, SceneLoader sceneLoader, 
             LoadingCurtain loadingCurtain, GameFactory gameFactory, StaticDataService staticDataService)
         {
-            _coroutineRunner = coroutineRunner;
+            _dontDestroyCreator = dontDestroyCreator;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
             _loadingCurtain = loadingCurtain;
@@ -41,7 +41,7 @@ namespace NM.States
         }
         private void InitPool()
         {
-            _gameFactory.CreatePool(_coroutineRunner);
+            _gameFactory.CreatePool(_dontDestroyCreator);
         }
         private void InitHud()
         {

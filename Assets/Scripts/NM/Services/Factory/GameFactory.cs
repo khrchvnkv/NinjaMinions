@@ -52,9 +52,9 @@ namespace NM.Services.Factory
             _inputService = inputService;
             _windowService = windowService;
             _progressService = progressService;
-            _poolService = poolService;
+            _poolService = poolService; 
         }
-        public void CreatePool(ICoroutineRunner coroutineRunner) => _poolService.CreatePool(coroutineRunner);
+        public void CreatePool(IDontDestroyCreator dontDestroyCreator) => _poolService.CreatePool(dontDestroyCreator);
         public void AddToPool<T>(GameObject instance) where T : IPoolObject
         {
             _poolService.AddToPool<T>(instance);

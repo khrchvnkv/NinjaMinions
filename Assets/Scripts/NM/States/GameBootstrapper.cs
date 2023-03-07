@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NM.States
 {
-    public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
+    public class GameBootstrapper : MonoBehaviour, ICoroutineRunner, IDontDestroyCreator
     {
         [SerializeField] private LoadingCurtain _curtain;
         
@@ -13,7 +13,7 @@ namespace NM.States
         private void Awake()
         {
             var curtain = Instantiate(_curtain);
-            _game = new Game(this, curtain, AllServices.Container);
+            _game = new Game(this, this, curtain, AllServices.Container);
             _game.StateMachine.Enter<BootstrapState>();  
             DontDestroyOnLoad(this);
         }

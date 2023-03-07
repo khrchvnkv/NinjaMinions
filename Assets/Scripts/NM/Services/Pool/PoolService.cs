@@ -20,12 +20,12 @@ namespace NM.Services.Pool
         {
             _assetProvider = assetProvider;
         }
-        public void CreatePool(ICoroutineRunner coroutineRunner)
+        public void CreatePool(IDontDestroyCreator dontDestroyCreator)
         {
             if (_pool == null)
             {
                 var pool = new GameObject("Pool");
-                coroutineRunner.MarkAsDontDestroyOnLoad(pool);
+                dontDestroyCreator.MarkAsDontDestroyOnLoad(pool);
                 _pool = new PoolContainer(_assetProvider, pool.transform);
             }
         }
