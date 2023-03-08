@@ -15,8 +15,11 @@ namespace NM.States
         private readonly GameFactory _gameFactory;
         private readonly StaticDataService _staticDataService;
 
-        public LoadLevelState(IDontDestroyCreator dontDestroyCreator, GameStateMachine gameStateMachine, SceneLoader sceneLoader, 
-            LoadingCurtain loadingCurtain, GameFactory gameFactory, StaticDataService staticDataService)
+        private bool _isInitialLaunch = true;
+
+        public LoadLevelState(IDontDestroyCreator dontDestroyCreator, GameStateMachine gameStateMachine, 
+            SceneLoader sceneLoader, LoadingCurtain loadingCurtain, GameFactory gameFactory, 
+            StaticDataService staticDataService)
         {
             _dontDestroyCreator = dontDestroyCreator;
             _gameStateMachine = gameStateMachine;
@@ -41,7 +44,7 @@ namespace NM.States
         }
         private void InitPool()
         {
-            _gameFactory.CreatePool(_dontDestroyCreator);
+            if (_isInitialLaunch) _gameFactory.CreatePool(_dontDestroyCreator);
         }
         private void InitHud()
         {
@@ -63,13 +66,15 @@ namespace NM.States
         }
         private void InformProgressReaders(SaveSlotData slot)
         {
-            foreach (var reader in _gameFactory.ProgressReaders)
+            var readers = _gameFactory.GetProgressReaders();
+            foreach (var reader in readers)
             {
                 reader.LoadProgress(slot);
             }
         }
         public void Exit()
         {
+            if (_isInitialLaunch) _isInitialLaunch = false;
             _loadingCurtain.Hide();
         }
     }

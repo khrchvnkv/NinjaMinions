@@ -24,13 +24,14 @@ namespace NM.Services.SaveLoad
         {
             _progressService.Progress.CurrentSlotIndex = slotIndex;
             var slot = _progressService.Progress.GetSlotAt(slotIndex);
-            slot.SaveTimestamp = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-            slot.Level = SceneManager.GetActiveScene().name;
-            slot.MinionsData.Clear();
-            slot.EnemiesData.Clear();
-            slot.IsSaved = true;
-            
-            foreach (var writer in _gameFactory.ProgressWriters)
+            slot.With()
+                .WithSaveTimeStamp(DateTime.Now.ToString(CultureInfo.InvariantCulture))
+                .WithLevel(SceneManager.GetActiveScene().name)
+                .WithEmptyCharactersData()
+                .WithSavedStatus(true);
+
+            var writers = _gameFactory.GetProgressWriters();
+            foreach (var writer in writers)
             {
                 writer.SaveProgress(slot);
             }

@@ -7,8 +7,9 @@ namespace NM.Services.UIWindows
     {
         private readonly IDontDestroyCreator _dontDestroyCreator;
         
+        public GameObject HUD { get; private set; }
         public GameHUD GameHUD { get; private set; }
-        public bool IsHudCreated { get; private set; }
+        public bool IsHudCreated => HUD != null;
         
         public WindowService(IDontDestroyCreator dontDestroyCreator)
         {
@@ -16,10 +17,10 @@ namespace NM.Services.UIWindows
         }
         public void RegisterHud(GameObject hud)
         {
+            HUD = hud;
             GameHUD = hud.GetComponent<GameHUD>();
             GameHUD.Construct();
             _dontDestroyCreator.MarkAsDontDestroyOnLoad(GameHUD.gameObject);
-            IsHudCreated = true;
         }
     }
 }
