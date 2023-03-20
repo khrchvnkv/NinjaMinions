@@ -11,10 +11,11 @@ using UnityEngine;
 
 namespace NM.UnityLogic.Characters.Minion
 {
-    public class MinionsMover : MonoBehaviour, IClearable, IPoolObject
+    public class MinionsMover : MonoBehaviour, IUpdater, IClearable, IPoolObject
     {
         private List<MinionContainer> _minions = new List<MinionContainer>();
 
+        private IUpdateRunner _updateRunner;
         private GameLoopService _gameLoopService;
         private InputService _inputService;
         private GameFactory _gameFactory;
@@ -24,9 +25,10 @@ namespace NM.UnityLogic.Characters.Minion
         private CameraFollow _cameraFollow;
         private int _currentMinionIndex;
 
-        public void Construct(InputService inputService, GameFactory gameFactory, 
+        public void Construct(IUpdateRunner updateRunner, InputService inputService, GameFactory gameFactory, 
             WindowService windowService, PersistentProgressService progressService)
         {
+            _updateRunner = updateRunner;
             _currentMinionIndex = 0;
             _gameLoopService = AllServices.Container.Single<GameLoopService>();
             _inputService = inputService;
@@ -34,6 +36,7 @@ namespace NM.UnityLogic.Characters.Minion
             _windowService = windowService;
             _progressService = progressService;
             _cameraFollow = Camera.main.GetComponent<CameraFollow>();
+            updateRunner.AddUpdate(this);
             _inputService.OnInputActivated += StartLogic;
         }
         public MinionContainer GetMinionWithId(string id)
@@ -47,11 +50,12 @@ namespace NM.UnityLogic.Characters.Minion
         public void AddMinion(MinionContainer minion) => _minions.Add(minion);
         public void Clear()
         {
+            _updateRunner.RemoveUpdate(this);
             _inputService.OnInputActivated -= StartLogic;
             _minions.Clear();
             _gameFactory.AddToPool<MinionsMover>(gameObject);
         }
-        private void Update()
+        public void UpdateLogic()
         {
             if (!_inputService.IsActive) return;
             if (_minions.Count > 0)

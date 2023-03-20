@@ -10,9 +10,9 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Patrolman
     {
         private PatrolmanStateRecovery _stateRecovery;
         
-        public override void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
+        public override void Construct(IUpdateRunner updateRunner, GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
         {
-            base.Construct(gameFactory, id, enemyData, patrolPoints);
+            base.Construct(updateRunner, gameFactory, id, enemyData, patrolPoints);
             IdleBehaviour = new PatrolBehaviour(Agent, transform, patrolPoints);
             if (_stateRecovery == null) _stateRecovery = new PatrolmanStateRecovery(EnterBehaviour);
         }

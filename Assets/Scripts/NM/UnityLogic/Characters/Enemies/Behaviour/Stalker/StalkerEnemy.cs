@@ -15,9 +15,9 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Stalker
         private StalkerBehaviour _stalkerBehaviour;
         private bool _isAggro;
         
-        public override void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
+        public override void Construct(IUpdateRunner updateRunner, GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
         {
-            base.Construct(gameFactory, id, enemyData, patrolPoints);
+            base.Construct(updateRunner, gameFactory, id, enemyData, patrolPoints);
             _aggroZone.SetZoneScale(StaticData.AggroDistance);
             IdleBehaviour = new EmptyBehaviour();
             _isAggro = false;

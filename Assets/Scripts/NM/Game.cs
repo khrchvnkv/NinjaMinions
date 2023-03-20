@@ -7,10 +7,10 @@ namespace NM
     {
         public readonly GameStateMachine StateMachine;
 
-        public Game(ICoroutineRunner coroutineRunner, IDontDestroyCreator dontDestroyCreator,
+        public Game(ICoroutineRunner coroutineRunner, IUpdateRunner updateRunner, IDontDestroyMarker dontDestroyMarker,
             LoadingCurtain loadingCurtain, AllServices services)
         {
-            StateMachine = new GameStateMachine(coroutineRunner, dontDestroyCreator, new SceneLoader(coroutineRunner), loadingCurtain, services);
+            StateMachine = new GameStateMachine(coroutineRunner, updateRunner, dontDestroyMarker, new SceneLoader(coroutineRunner), loadingCurtain, services);
         }
     }
 }

@@ -25,8 +25,9 @@ namespace NM.Services.Factory
         
         public event Action OnCleanedUp;
 
-        public GameFactory(AssetProvider assets, StaticDataService staticData, InputService inputService,
-            WindowService windowService, PersistentProgressService progressService, PoolService poolService)
+        public GameFactory(IUpdateRunner updateRunner, AssetProvider assets, StaticDataService staticData, 
+            InputService inputService, WindowService windowService, PersistentProgressService progressService, 
+            PoolService poolService)
         {
             _poolService = poolService;
 
@@ -35,13 +36,13 @@ namespace NM.Services.Factory
             _savedProgressRegister = new SavedProgressRegister();
             _assetFactory = new AssetFactory(assets, _savedProgressRegister, poolService);
             _userInterfaceFactory = new UserInterfaceFactory(_assetFactory, windowService);
-            _minionsFactory = new MinionsFactory(_assetFactory, inputService, progressService, staticData, 
+            _minionsFactory = new MinionsFactory(updateRunner, _assetFactory, inputService, progressService, staticData, 
                 windowService, this);
-            _enemiesFactory = new EnemiesFactory(_assetFactory, this, staticData);
+            _enemiesFactory = new EnemiesFactory(updateRunner, _assetFactory, this, staticData);
 
             #endregion
         }
-        public void CreatePool(IDontDestroyCreator dontDestroyCreator) => _poolService.CreatePool(dontDestroyCreator);
+        public void CreatePool(IDontDestroyMarker dontDestroyMarker) => _poolService.CreatePool(dontDestroyMarker);
         public void AddToPool<T>(GameObject instance) where T : IPoolObject => _poolService.AddToPool<T>(instance);
         public GameObject CreateHud() => _userInterfaceFactory.CreateHud();
         public MinionContainer GetMinionWithId(string minionId) => _minionsFactory.GetMinionWithId(minionId);

@@ -7,6 +7,7 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
 {
     public interface IEnemy
     {
-        void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints);
+        void Construct(IUpdateRunner updateRunner, GameFactory gameFactory, string id, 
+            EnemyStaticData enemyData, List<Vector3> patrolPoints);
     }
 }

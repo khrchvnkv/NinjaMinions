@@ -11,12 +11,15 @@ namespace NM.Services.Factory
     {
         private const string EnemySpawner = "Characters/Enemies/EnemySpawnPoint";
 
+        private readonly IUpdateRunner _updateRunner;
         private readonly AssetFactory _assetFactory;
         private readonly GameFactory _gameFactory;
         private readonly StaticDataService _staticData;
 
-        public EnemiesFactory(AssetFactory assetFactory, GameFactory gameFactory, StaticDataService staticData)
+        public EnemiesFactory(IUpdateRunner updateRunner, AssetFactory assetFactory, GameFactory gameFactory, 
+            StaticDataService staticData)
         {
+            _updateRunner = updateRunner;
             _assetFactory = assetFactory;
             _gameFactory = gameFactory;
             _staticData = staticData;
@@ -34,14 +37,14 @@ namespace NM.Services.Factory
             var enemy = _assetFactory.CreateEnemyAssetByData(enemyData, parent);
             GameFactory.MoveTransform(enemy, parent);
             var enemyConstruct = enemy.GetComponent<IEnemy>();
-            enemyConstruct.Construct(_gameFactory, spawnerData.Id, enemyData, spawnerData.Points);
+            enemyConstruct.Construct(_updateRunner, _gameFactory, spawnerData.Id, enemyData, spawnerData.Points);
             return enemy;
         }
         public GameObject CreateBullet(GameObject prefab, Transform parent, BulletLogic.BulletParams bulletParams)
         {
             var bullet = _assetFactory.CreateAssetByInstance<BulletLogic>(prefab, parent);
             GameFactory.MoveTransform(bullet, parent);
-            bullet.GetComponent<BulletLogic>().Construct(_gameFactory, bulletParams);
+            bullet.GetComponent<BulletLogic>().Construct(_updateRunner, _gameFactory, bulletParams);
             return bullet;
         }
     }

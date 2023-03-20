@@ -16,10 +16,10 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour.Sniper
         private SniperBehaviour _sniperBehaviour;
         private bool _isAggro;
 
-        public override void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, 
+        public override void Construct(IUpdateRunner updateRunner, GameFactory gameFactory, string id, EnemyStaticData enemyData, 
             List<Vector3> patrolPoints)
         {
-            base.Construct(gameFactory, id, enemyData, patrolPoints);
+            base.Construct(updateRunner, gameFactory, id, enemyData, patrolPoints);
             IdleBehaviour = new EmptyBehaviour();
             _isAggro = false;
             if (_stateRecovery == null) _stateRecovery = new AggroStateRecovery(EnterBehaviour);

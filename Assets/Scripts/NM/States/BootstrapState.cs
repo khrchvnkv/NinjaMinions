@@ -15,15 +15,17 @@ namespace NM.States
     {
         private const string Initial = "Init";
 
-        private readonly IDontDestroyCreator _dontDestroyCreator;
+        private readonly IUpdateRunner _updateRunner;
+        private readonly IDontDestroyMarker _dontDestroyMarker;
         private readonly GameStateMachine _gameStateMachine;
         private readonly SceneLoader _sceneLoader;
         private readonly AllServices _services;
 
-        public BootstrapState(IDontDestroyCreator dontDestroyCreator,
+        public BootstrapState(IUpdateRunner updateRunner, IDontDestroyMarker dontDestroyMarker,
             GameStateMachine gameStateMachine, SceneLoader sceneLoader, AllServices services)
         {
-            _dontDestroyCreator = dontDestroyCreator;
+            _updateRunner = updateRunner;
+            _dontDestroyMarker = dontDestroyMarker;
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
             _services = services;
@@ -41,10 +43,11 @@ namespace NM.States
             _services.RegisterSingle<AssetProvider>(new AssetProvider());
             _services.RegisterSingle<PersistentProgressService>(new PersistentProgressService());
             RegisterStaticData();
-            _services.RegisterSingle<WindowService>(new WindowService(_dontDestroyCreator));
+            _services.RegisterSingle<WindowService>(new WindowService(_dontDestroyMarker));
             _services.RegisterSingle<PoolService>(new PoolService(_services.Single<AssetProvider>()));
             _services.RegisterSingle<GameFactory>(
-                new GameFactory(_services.Single<AssetProvider>(),
+                new GameFactory(_updateRunner,
+                    _services.Single<AssetProvider>(),
                     _services.Single<StaticDataService>(),
                     _services.Single<InputService>(),
                     _services.Single<WindowService>(),

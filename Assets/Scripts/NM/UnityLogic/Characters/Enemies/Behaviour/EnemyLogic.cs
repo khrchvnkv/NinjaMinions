@@ -11,7 +11,8 @@ using UnityEngine.AI;
 namespace NM.UnityLogic.Characters.Enemies.Behaviour
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public abstract class EnemyLogic<TBehaviour, TData> : MonoBehaviour, IEnemy, IClearable, ISavedProgressReaderWriter, IPoolObject 
+    public abstract class EnemyLogic<TBehaviour, TData> : MonoBehaviour, IUpdater, IEnemy, IClearable, 
+        ISavedProgressReaderWriter, IPoolObject 
         where TBehaviour : IEnemyBehaviour
         where TData : EnemyStaticData
     {
@@ -22,19 +23,22 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
         private IEnemyBehaviour _currentBehaviour;
         private bool _isDied;
 
+        private IUpdateRunner _updateRunner;
         protected GameFactory GameFactory;
         protected TBehaviour IdleBehaviour;
         protected TData StaticData;
 
-        public virtual void Construct(GameFactory gameFactory, string id, 
+        public virtual void Construct(IUpdateRunner updateRunner, GameFactory gameFactory, string id, 
             EnemyStaticData enemyData, List<Vector3> patrolPoints)
         {
+            _updateRunner = updateRunner;
             GameFactory = gameFactory;
             _id = id;
             StaticData = (TData)enemyData;
             Agent.speed = StaticData.Speed;
             AttackZone.SetZoneScale(enemyData.AttackDistance);
             _isDied = false;
+            _updateRunner.AddUpdate(this);
         }
         public void LoadProgress(SaveSlotData slotData)
         {
@@ -77,8 +81,13 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
             }
             slotData.EnemiesData.Add(new EnemyData(_id, position, rotation, stateMeta, _isDied));
         }
+        public void UpdateLogic()
+        {
+            _currentBehaviour?.UpdateBehaviour();
+        }
         public virtual void Clear()
         {
+            _updateRunner.RemoveUpdate(this);
             DeactivateTriggers();
         }
         protected virtual void ActivateTriggers()
@@ -112,9 +121,10 @@ namespace NM.UnityLogic.Characters.Enemies.Behaviour
             agentTransform.position = position;
             agentTransform.rotation = quaternion;
         }
-        private void Update()
+
+        public void Construct(GameFactory gameFactory, string id, EnemyStaticData enemyData, List<Vector3> patrolPoints)
         {
-            _currentBehaviour?.UpdateBehaviour();
+            throw new System.NotImplementedException();
         }
     }
 }

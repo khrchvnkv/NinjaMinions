@@ -15,6 +15,7 @@ namespace NM.Services.Factory
         private const string MinionSpawner = "Characters/Minions/MinionSpawnPoint";
         private const string CharactersMinion = "Characters/Minion";
 
+        private readonly IUpdateRunner _updateRunner;
         private readonly AssetFactory _assetFactory;
         private readonly InputService _inputService;
         private readonly PersistentProgressService _progressService;
@@ -24,10 +25,11 @@ namespace NM.Services.Factory
 
         private MinionsMover _mover;
 
-        public MinionsFactory(AssetFactory assetFactory, InputService inputService, 
-            PersistentProgressService progressService, StaticDataService staticData, 
-            WindowService windowService, GameFactory gameFactory)
+        public MinionsFactory(IUpdateRunner updateRunner, AssetFactory assetFactory, InputService inputService, 
+            PersistentProgressService progressService, StaticDataService staticData, WindowService windowService, 
+            GameFactory gameFactory)
         {
+            _updateRunner = updateRunner;
             _assetFactory = assetFactory;
             _inputService = inputService;
             _progressService = progressService;
@@ -40,7 +42,7 @@ namespace NM.Services.Factory
         {
             var instance = _assetFactory.CreateAssetByName<MinionsMover>(MinionsMover);
             _mover = instance.GetComponent<MinionsMover>();
-            _mover.Construct(_inputService, _gameFactory, _windowService, _progressService);
+            _mover.Construct(_updateRunner, _inputService, _gameFactory, _windowService, _progressService);
             instance.SetActive(true);
             return instance;
         }

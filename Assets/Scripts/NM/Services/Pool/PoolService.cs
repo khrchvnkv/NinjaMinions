@@ -20,12 +20,12 @@ namespace NM.Services.Pool
         {
             _assetProvider = assetProvider;
         }
-        public void CreatePool(IDontDestroyCreator dontDestroyCreator)
+        public void CreatePool(IDontDestroyMarker dontDestroyMarker)
         {
             if (_pool == null)
             {
                 var pool = new GameObject("Pool");
-                dontDestroyCreator.MarkAsDontDestroyOnLoad(pool);
+                dontDestroyMarker.MarkAsDontDestroyable(pool);
                 _pool = new PoolContainer(_assetProvider, pool.transform);
             }
         }

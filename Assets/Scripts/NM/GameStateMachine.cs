@@ -17,17 +17,18 @@ namespace NM
         private readonly Dictionary<Type, IExitableState> _states;
         private IExitableState _activeState;
 
-        public GameStateMachine(ICoroutineRunner coroutineRunner, IDontDestroyCreator dontDestroyCreator, 
-            SceneLoader sceneLoader, LoadingCurtain loadingCurtain, AllServices services)
+        public GameStateMachine(ICoroutineRunner coroutineRunner, IUpdateRunner updateRunner, 
+            IDontDestroyMarker dontDestroyMarker, SceneLoader sceneLoader, LoadingCurtain loadingCurtain, 
+            AllServices services)
         {
             _states = new Dictionary<Type, IExitableState>
             {
-                [typeof(BootstrapState)] = new BootstrapState(dontDestroyCreator, this, sceneLoader, services),
-                [typeof(LoadLevelState)] = new LoadLevelState(dontDestroyCreator, this, sceneLoader, loadingCurtain,
-                    services.Single<GameFactory>(), services.Single<StaticDataService>()),
+                [typeof(BootstrapState)] = new BootstrapState(updateRunner, dontDestroyMarker, this, sceneLoader, services),
                 [typeof(LoadProgressState)] = new LoadProgressState(this, 
                     services.Single<PersistentProgressService>(),
                     services.Single<SaveLoadService>()),
+                [typeof(LoadLevelState)] = new LoadLevelState(dontDestroyMarker, this, sceneLoader, loadingCurtain,
+                    services.Single<GameFactory>(), services.Single<StaticDataService>()),
                 [typeof(GameLoopState)] = new GameLoopState(this, services.Single<InputService>()),
             };
         }
