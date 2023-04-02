@@ -27,7 +27,7 @@ namespace NM.UnityLogic.UI
             base.Show(windowData);
             _closeBtn.onClick.AddListener(OnCloseBtnClicked);
             _restartLevelBtn.onClick.AddListener(OnRestartBtnClicked);
-            _slots.ForEach(s => s.Construct(WindowData.GameLoopService, WindowData.ProgressService, GameHUD));
+            _slots.ForEach(s => s.Construct(WindowData.GameLoopService, WindowData.ProgressService, WindowService));
         }
         public override void Hide()
         {
@@ -36,7 +36,7 @@ namespace NM.UnityLogic.UI
             _restartLevelBtn.onClick.RemoveListener(OnRestartBtnClicked);
             base.Hide();
         }
-        private void OnCloseBtnClicked() => GameHUD.Hide<SaveLoadWindowData>();
+        private void OnCloseBtnClicked() => WindowService.Hide<SaveLoadWindowData>();
         private void OnRestartBtnClicked()
         {
             WindowData.GameLoopService.RestartLevel();

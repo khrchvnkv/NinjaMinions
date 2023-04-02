@@ -1,16 +1,16 @@
 ﻿using System;
+using NM.Services.UIWindows;
 using UnityEngine;
 
 namespace NM.UnityLogic.UI
 {
     public abstract class WindowBase<TData> : MonoBehaviour, IWindow where TData : class, IWindowData
     {
-        protected GameHUD GameHUD;
-        protected TData WindowData;
-
+        protected WindowService WindowService { get; private set; }
+        protected TData WindowData { get; private set; }
         public Type DataType => typeof(TData);
 
-        public void Construct(GameHUD gameHUD) => GameHUD = gameHUD;
+        public void Construct(WindowService windowService) => WindowService = windowService;
         public virtual void Show(IWindowData windowData)
         {
             WindowData = windowData as TData;
@@ -26,7 +26,7 @@ namespace NM.UnityLogic.UI
     public interface IWindow
     {
         Type DataType { get; }
-        void Construct(GameHUD gameHUD);
+        void Construct(WindowService windowService);
         void Show(IWindowData windowData);
         void Hide();
     }

@@ -2,6 +2,7 @@
 using NM.Services.GameLoop;
 using NM.Services.PersistentProgress;
 using NM.Services.SaveLoad;
+using NM.Services.UIWindows;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,13 +18,13 @@ namespace NM.UnityLogic.UI
 
         private GameLoopService _gameLoopService;
         private PersistentProgressService _progressService;
-        private GameHUD _gameHUD;
+        private WindowService _windowService;
 
-        public void Construct(GameLoopService gameLoopService, PersistentProgressService progressService, GameHUD gameHUD)
+        public void Construct(GameLoopService gameLoopService, PersistentProgressService progressService, WindowService windowService)
         {
             _gameLoopService = gameLoopService;
             _progressService = progressService;
-            _gameHUD = gameHUD;
+            _windowService = windowService;
             UpdateSlotInfoText();
         }
         private void OnEnable()
@@ -45,7 +46,7 @@ namespace NM.UnityLogic.UI
         {
             if (CanReloadProgress())
             {
-                _gameHUD.Hide<SaveLoadWindowData>();
+                _windowService.Hide<SaveLoadWindowData>();
                 _gameLoopService.ReloadProgress(_slotIndex);
             }
         }

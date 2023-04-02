@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NM.Services.UIWindows;
 using UnityEngine;
 
 namespace NM.UnityLogic.UI
@@ -11,9 +12,10 @@ namespace NM.UnityLogic.UI
 
         private Dictionary<Type, IWindow> _windowsMap;
 
-        public void Construct()
+        public void Construct(WindowService windowService)
         {
             _windowsMap = new Dictionary<Type, IWindow>();
+            
             AddWindow(hudWindow);
             AddWindow(saveLoadWindow);
             
@@ -21,13 +23,12 @@ namespace NM.UnityLogic.UI
             void AddWindow(IWindow window)
             {
                 _windowsMap.Add(window.DataType, window);
-                window.Construct(this);
+                window.Construct(windowService);
             }
         }
-        public void Show(IWindowData windowData)
+        public void Show<TData>(TData windowData) where TData : IWindowData
         {
-            var type = windowData.GetType();
-            if (_windowsMap.TryGetValue(type, out var window))
+            if (_windowsMap.TryGetValue(typeof(TData), out var window))
             {
                 window.Show(windowData);
             }

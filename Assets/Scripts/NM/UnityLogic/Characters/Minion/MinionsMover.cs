@@ -96,8 +96,8 @@ namespace NM.UnityLogic.Characters.Minion
         private void UpdateHpTarget()
         {
             var currentMinion = _minions[_currentMinionIndex];
-            _windowService.GameHUD.Hide<HudWindowData>();
-            _windowService.GameHUD.Show(new HudWindowData(_gameLoopService, _progressService, currentMinion.MinionHp));
+            _windowService.Hide<HudWindowData>();
+            _windowService.Show(new HudWindowData(_gameLoopService, _progressService, currentMinion.MinionHp));
         }
         private void UpdateCameraTarget()
         {

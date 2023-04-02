@@ -45,7 +45,7 @@ namespace NM.UnityLogic.UI
         private void OpenSaveLoadSettings()
         {
             Time.timeScale = 0.0f;
-            GameHUD.Show(new SaveLoadWindowData(WindowData.GameLoopService, WindowData.ProgressService));
+            WindowService.Show(new SaveLoadWindowData(WindowData.GameLoopService, WindowData.ProgressService));
         }
         private void SetMaxHp(int maxHp) => _hpSlider.maxValue = maxHp;
         private void ChangeHp(int newHpValue) => _hpSlider.value = newHpValue;
